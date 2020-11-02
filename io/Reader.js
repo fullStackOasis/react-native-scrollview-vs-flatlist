@@ -9,4 +9,3 @@ getName = async () => {
 export default {
 	getNames
 }
-		  
