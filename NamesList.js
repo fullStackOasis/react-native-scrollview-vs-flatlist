@@ -27,9 +27,12 @@ export default class NamesList extends React.Component {
 		header: this.props.headerData || {},
 		selected: [],
 		scrollEnabled: false,
+		headerHeight: 0,
+
 	  };
 	console.log("NamesList constructor " + JSON.stringify(this.state.header));
-    this.renderHeader = this.renderHeader.bind(this);
+	this.renderHeader = this.renderHeader.bind(this);
+	this.onHeaderLayout = this.onHeaderLayout.bind(this);
   }
 
   componentDidMount() {
@@ -116,7 +119,7 @@ export default class NamesList extends React.Component {
         </ListHeader>
         <ListItem
           {...x}
-          style={{ backgroundColor: 'yellow', color: 'red', height : 1 }}
+          style={{ backgroundColor: 'yellow', color: 'red', height : 50 }}
         />
 		</View>
       </React.Fragment>
@@ -135,11 +138,14 @@ export default class NamesList extends React.Component {
           pageY: py
         });
       });
-    });
-    this.setState({
-      containerHeight: layout && layout.height
 	});
 	*/
+	if (layout && this.state && (layout.height != this.state.headerHeight)) {
+		console.log("NamesList.onHeaderLayout, height is SET TO STATE " + layout.height);
+		this.setState({
+			headerHeight: layout.height
+		});
+	}
   };
 
 
@@ -180,6 +186,7 @@ export default class NamesList extends React.Component {
 	  let data = this.props.data || ['No Names Found'];
 	  let titles = Object.keys(data);
 	  console.log("NamesList render Titles were: " + JSON.stringify(titles));
+	  let headerHeight = this.state ? this.state.headerHeight : 0;
     return (
       <React.Fragment>
 		<SWAlphabetFlatList
@@ -196,7 +203,7 @@ export default class NamesList extends React.Component {
 		renderHeader={this.renderHeader}
 		renderItem={this.renderItem}
 		onSelect={this.respondToSelect}
-
+		headerHeight={headerHeight}
 		sectionItemComponent={this.sectionItemComponent}
 		sectionHeaderComponent={({ title }) => (
 			<ListHeader border={false} padding={true}>

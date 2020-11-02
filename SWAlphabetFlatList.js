@@ -59,6 +59,8 @@ export class SWAlphabetFlatList extends Component {
    */
 	onSelect(index) {
 		console.log("SW titles from props: " + this.props.titles);
+		console.log(this.refs);
+		console.log(this.ref);
 		if (this.props.titles[index]) {
 			let title = this.props.titles[index]; // e.g. "T"
 			console.log("XXXX " + title);
@@ -69,7 +71,8 @@ export class SWAlphabetFlatList extends Component {
 			let data = this.state.dataSourceCoordinates[title];
 			let offset = data.y;
 			console.log("XXXX offset " + offset);
-			offset += 50;
+			let headerHeight = this.props.headerHeight || 0;
+			offset = offset - headerHeight;
 			this.list.scrollTo({ x: 0, y: offset, animated: false });
 			this.touchedTime = new Date().getTime();
 
@@ -158,6 +161,7 @@ export class SWAlphabetFlatList extends Component {
 	console.warn("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
 	console.warn("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
 	console.warn("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
+	// At this point, titles are obtained as props from the parent component.
     return (
       <View
         style={{
