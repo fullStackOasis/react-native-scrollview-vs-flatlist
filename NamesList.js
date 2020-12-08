@@ -119,7 +119,7 @@ export default class NamesList extends React.Component {
         </ListHeader>
         <ListItem
           {...x}
-          style={{ backgroundColor: 'yellow', color: 'red', height : 50 }}
+          style={{ backgroundColor: 'black', color: 'red', height : 50 }}
         />
 		</View>
       </React.Fragment>
@@ -159,7 +159,7 @@ export default class NamesList extends React.Component {
    * item within each section
    */
   renderItem({ item, index, sectionId }) {
-	  console.log("NamesList renderItem");
+	  console.log("NamesList renderItem " + JSON.stringify({...item}));
 	return <ListItem
 	{...item}
 	key={index}

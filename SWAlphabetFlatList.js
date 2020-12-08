@@ -158,9 +158,9 @@ export class SWAlphabetFlatList extends Component {
 	}
 
   render() {
-	console.warn("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
-	console.warn("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
-	console.warn("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
+	console.log("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
+	console.log("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
+	console.log("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
 	// At this point, titles are obtained as props from the parent component.
     return (
       <View

@@ -46,12 +46,12 @@ const ContentView = styled.View`
   flex: 1;
 `;
 
-const MainScreenWrapper = styled.View`
+const FlatMainScreenWrapper = styled.View`
   flex: 1;
   backgroundColor: transparent;
 `;
 
-class MainScreen extends Component {
+class FlatMainScreen extends Component {
 
 	constructor(props) {
 		super(props);
@@ -65,7 +65,7 @@ class MainScreen extends Component {
 		let data = navigation.getParam('names');
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		return (
-			<MainScreenWrapper>
+			<FlatMainScreenWrapper>
 			<ContentView
 			  size="small"
 			  tabs={true}
@@ -85,9 +85,9 @@ class MainScreen extends Component {
 			>
 			</NamesList>
 			</ContentView>
-			</MainScreenWrapper>
+			</FlatMainScreenWrapper>
 		)
 	}
 }
 
-export default MainScreen;
+export default FlatMainScreen;
