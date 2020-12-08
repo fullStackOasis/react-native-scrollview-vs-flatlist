@@ -78,7 +78,7 @@ export default class NamesList extends React.Component {
           return r;
         }, {});
     }
-
+console.log("NamesList called setState 1");
     this.setState({ items, header: headerData, hosts: hosts  }, () => {
       this.resetScroll();
     });
@@ -102,6 +102,7 @@ export default class NamesList extends React.Component {
   }
 
   handleScroll = isScrolling => {
+	console.log("NamesList called setState 2");
     this.setState({ scrollEnabled: isScrolling });
   };
 
@@ -141,7 +142,7 @@ export default class NamesList extends React.Component {
 	});
 	*/
 	if (layout && this.state && (layout.height != this.state.headerHeight)) {
-		console.log("NamesList.onHeaderLayout, height is SET TO STATE " + layout.height);
+		console.log("NamesList called setState 3");
 		this.setState({
 			headerHeight: layout.height
 		});
@@ -180,10 +181,8 @@ export default class NamesList extends React.Component {
 	}
 
   render() {
-	  console.log("NamesList render Item Height: " + ITEM_HEIGHT);
-	  console.log("NamesList render, props: " + JSON.stringify(this.props));
-	  console.log("NamesList render, this.props.headerData: " + JSON.stringify(this.props.headerData));
 	  let data = this.props.data || ['No Names Found'];
+	  // titles is a list like ["A", "B", "D",...]
 	  let titles = Object.keys(data);
 	  console.log("NamesList render Titles were: " + JSON.stringify(titles));
 	  let headerHeight = this.state ? this.state.headerHeight : 0;

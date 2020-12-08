@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
 const NAV_OFFSET = 0;
 const OFFSET = 0;
-const MAX = 140;
+const MAX = 3;
 const ContentView = styled.View`
   height: ${props =>
     windowHeight -

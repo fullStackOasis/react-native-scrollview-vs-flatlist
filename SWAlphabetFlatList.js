@@ -29,7 +29,7 @@ export class SWAlphabetFlatList extends Component {
    * @param data
    */
   refreshBaseData(data) {
-	console.log("SW refreshBaseData " + JSON.stringify(data));
+	console.log("SW called setState A");
     const titles = Object.keys(data);
 	this.setState({
       titles,
@@ -44,11 +44,13 @@ export class SWAlphabetFlatList extends Component {
     // Ensure that the position coordinates are obtained after the navigation animation is completed, otherwise it will be inaccurate
     InteractionManager.runAfterInteractions(() => {
       this.alphabet.measure((x, y, w, h, px, py) => {
+		console.log("SW called setState B");
         this.setState({
           pageY: py
         });
       });
-    });
+	});
+	console.log("SW called setState C");
     this.setState({
       containerHeight: layout && layout.height
     });
@@ -80,6 +82,7 @@ export class SWAlphabetFlatList extends Component {
 			if (this.oldIndex !== index) {
 				this.oldIndex = index;
 				this.props.onSelect ? this.props.onSelect(index) : null;
+				console.log("SW called setState D");
 				this.setState({
 					selectAlphabet: this.state.titles[index]
 				});
@@ -97,7 +100,7 @@ export class SWAlphabetFlatList extends Component {
       if (new Date().getTime() - this.touchedTime < 3000) {
         return;
       }
-
+	  console.log("SW called setState E");
       this.setState({
         selectAlphabet: viewableItems[0].item
       });
@@ -112,6 +115,7 @@ export class SWAlphabetFlatList extends Component {
    * @param{String} item is the header for this section, like "A", "B", etc.
    */
 	renderItem(item) {
+		console.log("SW renderItem item = " + JSON.stringify(item));
 		// this.props.data is something like {"A":[{"name":"Edith Abbott","id":1}, ...}
 		return (<KeyedView key={item} item={item}
 			sectionHeader={this.props.sectionHeaderComponent}
@@ -138,12 +142,18 @@ export class SWAlphabetFlatList extends Component {
 	/**
 	 * Example of what input data may look like:
 	 * {"id":"C","width":411.4285583496094,"height":204.57142639160156,"x":0,"y":274.8571472167969}
+	 * 
+	 * TODO FIXME. This method gets called for every new letter that's laid out.
+	 * If you've got 27 letters, then this method calls setState every single time it's called,
+	 * and that triggers a re-render, even though this component is not ready to be re-rendered.
+	 * 
 	 * @param {data} Object with an id property that is a letter, like "C", a height, width, x, and y value
 	 */
 	handleChildLayout = (data) => {
 		var obj = {};
 		obj[data.id] = data;
 		var newKey = "" + data.id;
+		console.log("SW called setState F newKey = " + newKey);
 		this.setState(prevState => {
 			let z = { ...prevState.dataSourceCoordinates };
 			//console.warn("SW Hello prevState ZZZ! " + JSON.stringify(z));
@@ -173,7 +183,9 @@ export class SWAlphabetFlatList extends Component {
         }}>
         <ScrollView
           ref={ref => {
-            this.list = ref;
+			this.list = ref;
+			console.log("PICKLES!");
+			console.log(ref);
           }}
           {...this.props}>
           {this.props.renderHeader ? this.props.renderHeader() : null}
