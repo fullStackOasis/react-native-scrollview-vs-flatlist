@@ -5,8 +5,9 @@ import { ListItem } from './ListItem';
 import { ListHeader } from './ListHeader';
 import { ListFilterItem } from './ListFilterItem';
 //import SWAlphabetFlatList from '@yoonzm/react-native-alphabet-flat-list';
-import { SWAlphabetFlatList } from './SWAlphabetFlatList';
-const ITEM_HEIGHT = 50;
+import SWAlphabetFlatList from './SWAlphabetFlatList';
+import SWAlphabetFlatListRework from './SWAlphabetFlatListRework';
+const ITEM_HEIGHT = 70;
 
 export default class NamesList extends React.Component {
   state = {
@@ -74,7 +75,7 @@ export default class NamesList extends React.Component {
             if (!r[key]) r[key] = [e];
             else r[key].push(e);
           }
-
+console.log("XXXXX");
           return r;
         }, {});
     }
@@ -123,8 +124,8 @@ console.log("NamesList called setState 1");
           style={{ backgroundColor: 'black', color: 'red', height : 50 }}
         />
 		</View>
-      </React.Fragment>
-    ) : null;
+	  </React.Fragment>
+	) : null;
   };
 
   /**
@@ -165,7 +166,7 @@ console.log("NamesList called setState 1");
 	{...item}
 	key={index}
 	selected={item.selected}
-	style={{ height : ITEM_HEIGHT, color: 'white', backgroundColor : 'gray' }}
+	style={{ height : ITEM_HEIGHT, color: 'white', backgroundColor : 'navy'}}
 	/>
   }
 
@@ -181,11 +182,47 @@ console.log("NamesList called setState 1");
 	}
 
   render() {
-	  let data = this.props.data || ['No Names Found'];
-	  // titles is a list like ["A", "B", "D",...]
-	  let titles = Object.keys(data);
-	  console.log("NamesList render Titles were: " + JSON.stringify(titles));
-	  let headerHeight = this.state ? this.state.headerHeight : 0;
+	let rework = this.props.rework;
+	let data = this.props.data || ['No Names Found'];
+	let sections = this.props.sections || null;
+	console.log("NamesList render sections = " + JSON.stringify(sections));
+	// titles is a list like ["A", "B", "D",...]
+	let titles = Object.keys(data);
+	console.log("NamesList render Titles were: " + JSON.stringify(titles));
+	let headerHeight = this.state ? this.state.headerHeight : 0;
+	if (this.props.rework) {
+		return (
+			<React.Fragment>
+			  <SWAlphabetFlatListRework
+			  ref={ref => (this.listView = ref)}
+			  data={data}
+			  sections={sections}
+			  titles={titles}
+			  itemHeight={ITEM_HEIGHT}
+			  enableEmptySections={false}
+			  removeClippedSubviews={false}
+			  scrollEnabled={true}
+			  showsVerticalScrollIndicator={false}
+			  sectionHeaderHeight={ITEM_HEIGHT}
+			  stickyHeaderIndices={[0]}
+			  renderHeader={this.renderHeader}
+			  renderItem={this.renderItem}
+			  onSelect={this.respondToSelect}
+			  headerHeight={headerHeight}
+			  sectionItemComponent={this.sectionItemComponent}
+			  sectionHeaderComponent={({ title }) => (
+				  <ListHeader border={false} padding={true}>
+				  {title}
+				  </ListHeader>
+			  )}
+			  ListHeaderComponent={this.renderHeader}
+			  style={{
+				  flex: 1
+			  }}
+			  />
+			</React.Fragment>
+		  );
+	}
     return (
       <React.Fragment>
 		<SWAlphabetFlatList

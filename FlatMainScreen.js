@@ -63,6 +63,9 @@ class FlatMainScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		let data = navigation.getParam('names');
+		let listData = navigation.getParam('listNames');
+		let rework = navigation.getParam('rework');
+		console.log("FFFF sending listData as sections = " + JSON.stringify(listData));
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		return (
 			<FlatMainScreenWrapper>
@@ -77,7 +80,9 @@ class FlatMainScreen extends Component {
 			<NamesList
 				key="namesList"
 				/*ref={ref => (this.contactList = ref)}*/
+				rework={rework}
 				data={data}
+				sections={listData}
 				headerData={headerData}
 				insetPadding={true}
 				onSwipeablePress={this._handleSwipeableButton}

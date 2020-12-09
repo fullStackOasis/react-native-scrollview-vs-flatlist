@@ -34,6 +34,7 @@ const ListItemButton = styled(Button).attrs(props => ({
 
 const ListItemTitle = styled.Text`
   color: #f1f1f1;
+  font-size: 30px;
   margin: 5px 0;
 `;
 
@@ -42,23 +43,27 @@ const ListItemHeader = styled.Text`
   opacity: ${props => (props.blocked || props.banned ? 1 : 0.7)};
   text-transform: uppercase;
   max-width: 90%;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 500;
 `;
 
 const ListItemDetail = styled.Text`
-  color: green;
+  color: lightgreen;
   opacity: 0.7;
   max-width: 90%;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 500;
 `;
 
+/**
+ * This sets the style for the name, e.g. Abigail, in SWAlphabetFlatList
+ */
 const ListItemDescription = styled.Text`
-  color: #f0f0f0;
+  color: #ffffff;
   opacity: ${props => (props.unread && !props.welcome ? 1 : 0.7)};
   max-width: 90%;
   font-weight: 500;
+  font-size: 30px;
   ${props =>
     props.unread && !props.welcome && props.type === 'notification'
       ? 'font-family: gt-america-medium'

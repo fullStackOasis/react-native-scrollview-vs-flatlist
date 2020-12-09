@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { View, InteractionManager, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, View, InteractionManager, Dimensions, SectionList, SafeAreaView, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { SectionHeader } from './SectionHeader';
 import { AlphabetListView } from './AlphabetListView';
 import { SectionListItem } from './SectionListItem';
+const Constants = {
+	statusBarHeight : 10
 
+};
 /**
  * See similar code in https://github.com/UseAllFive/react-native-alphabet-flat-list
  */
-export default class SWAlphabetFlatList extends Component {
+export default class SWAlphabetFlatListRework extends Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
     renderItem: PropTypes.func.isRequired, // this.props.renderItem - DO NOT CONFUSE WITH this.renderItem!
@@ -108,7 +111,7 @@ export default class SWAlphabetFlatList extends Component {
   };
 
 	handleSectionHeaderLayout = (data) => {
-		console.log("SWAlphabetFlatList.handleSectionHeaderLayout " + JSON.stringify(data));
+		console.log("SWAlphabetFlatListRework.handleSectionHeaderLayout " + JSON.stringify(data));
 	}
 
   /**
@@ -168,39 +171,32 @@ export default class SWAlphabetFlatList extends Component {
 	}
 
   render() {
-	console.log("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
-	console.log("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
-	console.log("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
+	console.log("SWAlphabetFlatListRework.render: this.state.titles " + JSON.stringify(this.state.titles));
+	console.log("SWAlphabetFlatListRework.render: this.props.sections " + JSON.stringify(this.props.sections));
+	console.log("SWAlphabetFlatListRework.render: this.props.titles " + JSON.stringify(this.props.titles));
 	// At this point, titles are obtained as props from the parent component.
     return (
-      <View
-        style={{
-          justifyContent: 'center',
-          flex: 1
-        }}
-        ref={ref => {
-          this.container = ref;
-        }}>
-        <ScrollView
-          ref={ref => {
-			this.list = ref;
-			console.log(ref);
-          }}
-          {...this.props}>
-          {this.props.renderHeader ? this.props.renderHeader() : null}
-          {this.props.titles.map(item => this.renderItem(item))}
-        </ScrollView>
-        <AlphabetListView
-          container={ref => (this.alphabet = ref)}
-          pageY={this.state.pageY}
-          onLayout={this.onLayout}
-          contentHeight={this.state.containerHeight}
-          item={this.props.sectionItemComponent}
-          titles={this.props.titles}
-          selectAlphabet={this.state.selectAlphabet}
-          onSelect={this.onSelect}
-        />
-      </View>
+		<SafeAreaView>
+			<SectionList
+				sections={this.props.sections}
+				renderItem={(item) => <Item title={item["item"]["name"]} />}
+				renderSectionHeader={({ section: { title } }) => (
+					<Text style={styles.header}>{title}</Text>
+				)}
+				keyExtractor={(item, index) => item + index}
+			>
+			</SectionList>
+			<AlphabetListView
+				container={ref => (this.alphabet = ref)}
+				pageY={this.state.pageY}
+				onLayout={this.onLayout}
+				contentHeight={this.state.containerHeight}
+				item={this.props.sectionItemComponent}
+				titles={this.props.titles}
+				selectAlphabet={this.state.selectAlphabet}
+				onSelect={this.onSelect}
+			/>
+	  </SafeAreaView>
     );
   }
 }
@@ -261,3 +257,29 @@ class KeyedView extends React.Component {
 		</View>);
 	}
 };
+
+const Item = ({ title }) => (
+	<View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+	</View>
+);
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		marginTop: Constants.statusBarHeight,
+		marginHorizontal: 16
+	},
+	item: {
+		backgroundColor: "#f9c2ff",
+		padding: 20,
+		marginVertical: 8
+	},
+	header: {
+		fontSize: 32,
+		backgroundColor: "#fff"
+	},
+	title: {
+		fontSize: 24
+	}
+});

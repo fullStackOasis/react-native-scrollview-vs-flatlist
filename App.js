@@ -4,8 +4,8 @@ import MainScreen from './MainScreen';
 import FlatMainScreen from './FlatMainScreen';
 import HomeScreen from './HomeScreen';
 
-//if (!__DEV__ || __DEV__) {
-if (!__DEV__) {
+if (!__DEV__ || __DEV__) {
+//if (!__DEV__) {
 	console = {};
 	console.log = () => {};
 	console.error = () => {};

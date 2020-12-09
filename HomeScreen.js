@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import { Dimensions, Platform } from 'react-native';
 import loadLocalResource from 'react-native-local-resource';
 import styled from 'styled-components/native';
@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
 const NAV_OFFSET = 0;
 const OFFSET = 0;
-const MAX = 3;
+const MAX = 250;
 const ContentView = styled.View`
   height: ${props =>
     windowHeight -
@@ -72,14 +72,15 @@ class HomeScreen extends Component {
 		let counts = {};
 		let caps = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 		caps.forEach(function(el) {
-			values[el] = [];
-			counts[el] = 0;
+			values[el] = []; // e.g. values["A"] is an empty array
+			counts[el] = 0; // e.g. counts["A"] is an empty array
 		})
 		let countNames = 0;
 		let deletes = {};
 		caps.forEach(function(el) {
 			deletes[el] = el;
 		});
+		// This part is just trying to make each item a different height
 		for (let i = 0; i < MAX; i++) {
 			let n = names[i];
 			let splitarr = n.split(",");
@@ -89,7 +90,7 @@ class HomeScreen extends Component {
 			} else {
 				values[letter].push({ name : splitarr[0], description : splitarr[0], detail : "" + splitarr[1] });
 			}
-			delete deletes[letter];
+			delete deletes[letter]; // save for delete later.
 		}
 		console.log(JSON.stringify(deletes));
 		// Sort within each letter of the alphabet.
@@ -100,8 +101,9 @@ class HomeScreen extends Component {
 		Object.keys(deletes).forEach(function(el) {
 			delete values[el];
 		});
-		Object.keys(values).forEach(function(letter) {
-			
+		let ourLetters = Object.keys(values);
+		console.log(ourLetters);
+		ourLetters.forEach(function(letter) {
 			values[letter].forEach(function(v) {
 				id = counts[letter]++;
 				countNames++;
@@ -109,6 +111,17 @@ class HomeScreen extends Component {
 			})
 		});
 		console.log(JSON.stringify(values));
+
+		// listValues is used for SectionList, https://reactnative.dev/docs/sectionlist
+		// This is an attempt to make the app more efficient.
+		let listValues = [];
+		ourLetters.forEach(function(letter) {
+			let obj = { title : letter, data : values[letter] };
+			console.log(obj);
+			listValues.push(obj);
+		});
+		console.log("listValues "+ JSON.stringify(listValues));
+
 		/*
 		let trunc = {
 			A: [ { id: 0, name : '1'} ],
@@ -116,8 +129,17 @@ class HomeScreen extends Component {
 			C: [{ id: 2, name : '3'}]
 		};*/
 		//this.setState({names});
-		console.log("Calling setState after readData");
-		this.setState({names : values, countNames : countNames});
+		console.log("Calling setState after readData " + JSON.stringify(values));
+		/* For example, values may be -
+			{"A":
+				[ {"name":"Ava","description":"Ava","detail":"F","id":0} ],
+			"E":
+				[{"name":"Emma","description":"Emma","id":0}],
+			"O":
+				[{"name":"Olivia","description":"Olivia","detail":"F","id":0}]
+			}
+		*/
+		this.setState({names : values, countNames : countNames, listNames : listValues});
 	}
 
 	render() {
@@ -131,15 +153,28 @@ class HomeScreen extends Component {
 		//let text = "hello World";//(this.state.names && this.state.names.length) ? this.state.names[0] :'No names found';
 		return (
 			<HomeScreenWrapper>
-			<View style={{flex: 1}}>
-				<Text>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
+			<View style={styles.title}>
+				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>
 			<PButton title={'Read Data'} color='green' onPress={this.readData} />
-			<PButton title={'Main Screen'} onPress={() => this.props.navigation.navigate('Main', { names : this.state.names })} />
-			<PButton title={'Flat Main Screen'} onPress={() => this.props.navigation.navigate('FlatMain', { names : this.state.names })} />
+			<PButton title={'Main Screen'}
+				onPress={() => this.props.navigation.navigate('Main',
+					{ names : this.state.names, listNames : this.state.listNames, rework : false })} />
+			<PButton title={'Flat Main Screen'}
+				onPress={() => this.props.navigation.navigate('FlatMain',
+					{ names : this.state.names, listNames : this.state.listNames, rework : true })} />
 			</HomeScreenWrapper>
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	title: {
+		flex: 1,
+		marginHorizontal: 16,
+		fontSize: 24,
+		marginTop: 10
+	}
+});
 
 export default HomeScreen;
