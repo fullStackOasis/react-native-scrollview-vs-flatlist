@@ -6,7 +6,8 @@ export default class PButton extends Component {
 		console.log(this.props);
 		return (
 			<View style={{flex : 1, padding: 10}}>
-				<Button title={this.props.title} color='green' onPress={this.props.onPress}></Button>
+				<Button title={this.props.title} color={this.props.color||'green'} onPress={this.props.onPress}>
+				</Button>
 			</View>
 		);
 	}

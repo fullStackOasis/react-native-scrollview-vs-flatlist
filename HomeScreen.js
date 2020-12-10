@@ -56,6 +56,9 @@ const HomeScreenWrapper = styled.View`
 
 class HomeScreen extends Component {
 
+	static navigationOptions = {
+		title: 'Testing FlatList and ScrollView Performance',
+	};
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -190,16 +193,19 @@ class HomeScreen extends Component {
 				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>
 
-			<PButton title={'Read 100 Names'} color='green' onPress={() => { this.readData(100); }} />
-			<PButton title={'Fetch 100 Names From Server'} color='green' onPress={() => { this.fetchNames(250); }} />
-			<PButton title={'Read 250 Names'} color='green' onPress={() => { this.readData(250); }} />
-			<PButton title={'Fetch 250 Names From Server'} color='green' onPress={() => { this.fetchNames(250); }} />
-			<PButton title={'Main Screen'}
+			<PButton title={'Read 100 Names in-app'} color='darkgreen' onPress={() => { this.readData(100); }} />
+			<PButton title={'Fetch 100 Names From Server'} color='mediumseagreen' backgroundcolor='black' onPress={() => { this.fetchNames(250); }} />
+			<PButton title={'Read 250 Names in-app'} color='darkgoldenrod' onPress={() => { this.readData(250); }} />
+			<PButton title={'Fetch 250 Names From Server'} color='chocolate' onPress={() => { this.fetchNames(250); }} />
+			<PButton title={'Main Screen'} color='red'
 				onPress={() => this.props.navigation.navigate('Main',
-					{ names : this.state.names, listNames : this.state.listNames, rework : false })} />
-			<PButton title={'Flat Main Screen'}
+					{ names : this.state.names, listNames : this.state.listNames, rework : false, showAlpha: true })} />
+			<PButton title={'Flat Main Screen'} color='blueviolet'
 				onPress={() => this.props.navigation.navigate('FlatMain',
 					{ names : this.state.names, listNames : this.state.listNames, rework : true })} />
+			<PButton title={'Main Screen No Alpha'} color='darkblue'
+				onPress={() => this.props.navigation.navigate('Main',
+					{ names : this.state.names, listNames : this.state.listNames, rework : true, showAlpha: false })} />
 			</HomeScreenWrapper>
 		)
 	}

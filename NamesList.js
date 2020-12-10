@@ -187,9 +187,10 @@ console.log("NamesList called setState 1");
 
   render() {
 	let rework = this.props.rework;
+	let noalpha = this.props.noalpha;
 	let data = this.props.data || ['No Names Found'];
 	let sections = this.props.sections || null;
-	console.log("NamesList render sections = " + JSON.stringify(sections));
+	console.log("NamesList this.props.showAlpha = " + this.props.showAlpha);
 	// titles is a list like ["A", "B", "D",...]
 	let titles = Object.keys(data);
 	console.log("NamesList render Titles were: " + JSON.stringify(titles));
@@ -227,11 +228,12 @@ console.log("NamesList called setState 1");
 			</React.Fragment>
 		  );
 	}
-    return (
+	return (
       <React.Fragment>
 		<SWAlphabetFlatList
 		ref={ref => (this.listView = ref)}
 		data={data}
+		showAlpha={this.props.showAlpha}
 		titles={titles}
 		itemHeight={ITEM_HEIGHT}
 		enableEmptySections={false}

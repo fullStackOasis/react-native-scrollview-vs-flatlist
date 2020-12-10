@@ -99,6 +99,7 @@ class MainScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		let data = navigation.getParam('names');
+		let showAlpha = navigation.getParam('showAlpha');
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		let progressBar = null;
 		if (this.state.progress) {
@@ -127,6 +128,7 @@ class MainScreen extends Component {
 				key="namesList"
 				/*ref={ref => (this.contactList = ref)}*/
 				data={data}
+				showAlpha={Boolean(showAlpha)}
 				headerData={headerData}
 				insetPadding={true}
 				onSwipeablePress={this._handleSwipeableButton}

@@ -173,7 +173,7 @@ export default class SWAlphabetFlatList extends Component {
    * For each letter - see handleChildLayout
    */
   render() {
-	console.log("SWAlphabetFlatList.RENDER");
+	console.log("SWAlphabetFlatList.RENDER this.props.showAlpha = " + this.props.showAlpha);
 	console.log("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
 	console.log("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
 	console.log("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
@@ -195,10 +195,11 @@ export default class SWAlphabetFlatList extends Component {
           {...this.props}>
           {this.props.renderHeader ? this.props.renderHeader() : null}
           {this.props.titles.map((item) => {
-			  console.log('xxx ' + JSON.stringify(item));
+			  console.log('XXXXXXXXXXXXXXX ' + JSON.stringify(item));
 			  return this.renderItem(item);
 		  })}
         </ScrollView>
+		{Boolean(this.props.showAlpha) &&
         <AlphabetListView
           container={ref => (this.alphabet = ref)}
           pageY={this.state.pageY}
@@ -208,7 +209,7 @@ export default class SWAlphabetFlatList extends Component {
           titles={this.props.titles}
           selectAlphabet={this.state.selectAlphabet}
           onSelect={this.onSelect}
-        />
+        />}
       </View>
     );
   }
@@ -236,7 +237,9 @@ class KeyedView extends React.Component {
 			x: e.nativeEvent.layout.x,
 			y: e.nativeEvent.layout.y // layout position of this SectionHeader. Hopefully! e.g. 160.57142639160156,
 		}
-		this.props.handleChildLayout(obj);
+		if (this.props.showAlpha) {
+			this.props.handleChildLayout(obj);
+		}
 	}
 
 	render () { 
