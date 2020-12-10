@@ -18,4 +18,4 @@ Tap a button to load 250 names from my server or from in-app. Then:
 
 This code is licensed with an MIT License.
 
-[YouTube video if that's run off commit d532ace](https://youtu.be/vI_fuE-J73A)
+[YouTube video that is run off commit d532ace](https://youtu.be/vI_fuE-J73A)
