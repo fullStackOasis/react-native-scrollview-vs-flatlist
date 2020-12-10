@@ -3,8 +3,6 @@ import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
 import {NavigationEvents} from 'react-navigation';
-// It's surprising how difficult it was to find how to read and import a local file!
-// https://github.com/IgorBelyayev/React-Native-Local-Resource
 import ProgressBar from 'react-native-progress/Bar';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -50,8 +48,17 @@ const FlatMainScreenWrapper = styled.View`
   backgroundColor: transparent;
 `;
 
+const TextWrapper = styled.Text`
+  text-align: center;
+  background-color: black;
+  color: lightblue;
+  font-size: 22px;
+  margin: 1px;
+`;
+
 class FlatMainScreen extends Component {
 
+	/** Lifecycle methods */
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -60,18 +67,33 @@ class FlatMainScreen extends Component {
 		};
 		this.showProgressBar = this.showProgressBar.bind(this);
 		this.hideProgressBar = this.hideProgressBar.bind(this);
+		this.onLayout = this.onLayout.bind(this);
 	}
 
-	showProgressBar() {
+	/**
+	 * Note: You cannot trust that componentDidMount will get called when
+	 * screen is dismissed; react-navigation does not do that.
+	 */
+	componentDidMount() {
+		this.hideProgressBar('FlatMainScreen componentDidMount');
+	}
+
+	/** End Lifecycle methods */
+
+	showProgressBar(msg) {
 		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
-		console.log("SHOWED");
+		console.log("FlatMainScreen showProgressBar " + msg);
 		this.setState({progress : true});
 	}
 
-	hideProgressBar() {
+	hideProgressBar(msg) {
 		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
-		console.log("SHOWED");
+		console.log("FlatMainScreen hideProgressBar " + msg);
 		this.setState({progress : false});
+	}
+
+	onLayout() {
+		this.hideProgressBar('FlatMainScreen onLayout');
 	}
 
 	render() {
@@ -81,17 +103,23 @@ class FlatMainScreen extends Component {
 		let rework = navigation.getParam('rework');
 		console.log("FFFF sending listData as sections = " + JSON.stringify(listData));
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
-		let progressBar = null;
+		/*let progressBar = null;
 		if (this.state.progress) {
 			progressBar = <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		}*/
+		let progressBar = null;
+		if (this.state.progress) {
+			progressBar = <TextWrapper>Loading</TextWrapper>;
+		} else {
+			progressBar = <TextWrapper>Finished loading</TextWrapper>;
 		}
 		return (
-			<FlatMainScreenWrapper>
+			<FlatMainScreenWrapper onLayout={this.onLayout}>
 			<NavigationEvents
-			onDidFocus={this.showProgressBar}
-			onWillFocus={payload => console.log('will focus', payload)}
-			onWillBlur={this.hideProgressBar}
-			onDidBlur={payload => console.log('did blur', payload)}
+			onDidFocus={() => {} } // noop
+			onWillFocus={() => { this.showProgressBar('willFocus'); } }
+			onWillBlur={() => { this.hideProgressBar('willBlur'); } }
+			onDidBlur={() => { this.hideProgressBar('didBlur'); } }
 			/>
 			{progressBar}
 			<ContentView

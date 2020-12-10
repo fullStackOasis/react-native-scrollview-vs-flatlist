@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Text } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
 import {NavigationEvents} from 'react-navigation';
-// It's surprising how difficult it was to find how to read and import a local file!
-// https://github.com/IgorBelyayev/React-Native-Local-Resource
+import ProgressBar from 'react-native-progress/Bar';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -49,22 +48,73 @@ const MainScreenWrapper = styled.View`
   backgroundColor: transparent;
 `;
 
+const TextWrapper = styled.Text`
+  text-align: center;
+  background-color: black;
+  color: lightblue;
+  font-size: 22px;
+  margin: 1px;
+`;
+
 class MainScreen extends Component {
 
+	/** Lifecycle methods */
 	constructor(props) {
 		super(props);
 		this.state = {
-			names : {}
+			names : {},
+			progress : false
 		};
+		this.showProgressBar = this.showProgressBar.bind(this);
+		this.hideProgressBar = this.hideProgressBar.bind(this);
+		this.onLayout = this.onLayout.bind(this);
+	}
+
+	/**
+	 * Note: You cannot trust that componentDidMount will get called when
+	 * screen is dismissed; react-navigation does not do that.
+	 */
+	componentDidMount() {
+		this.hideProgressBar('MainScreen componentDidMount');
+	}
+
+	/** End Lifecycle methods */
+
+	showProgressBar(msg) {
+		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		console.log("MainScreen showProgressBar " + msg);
+		this.setState({progress : true});
+	}
+
+	hideProgressBar(msg) {
+		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		console.log("MainScreen hideProgressBar " + msg);
+		this.setState({progress : false});
+	}
+
+	onLayout() {
+		this.hideProgressBar('MainScreen onLayout');
 	}
 
 	render() {
 		const { navigation } = this.props;
 		let data = navigation.getParam('names');
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
+		let progressBar = null;
+		if (this.state.progress) {
+			progressBar = <TextWrapper>Loading</TextWrapper>;
+		} else {
+			progressBar = <TextWrapper>Finished loading</TextWrapper>;
+		}
 		return (
-			<MainScreenWrapper>
-				<NavigationEvents onDidFocus={() => console.log('I am triggered MainScreen')} />
+			<MainScreenWrapper  onLayout={this.onLayout}>
+			<NavigationEvents
+			onDidFocus={() => {} } // noop
+			onWillFocus={() => { this.showProgressBar('willFocus'); } }
+			onWillBlur={() => { this.hideProgressBar('willBlur'); } }
+			onDidBlur={() => { this.hideProgressBar('didBlur'); } }
+			/>
+			{progressBar}
 			<ContentView
 			  size="small"
 			  tabs={true}

@@ -68,27 +68,28 @@ class HomeScreen extends Component {
 		this.processData = this.processData.bind(this);
 	};
 
-	async fetchNames() {
+	async fetchNames(nNames) {
 		let result = await fetch('https://fullstackoasis.com/biglist/names/yob2019.txt');
 		try {
 			let content = await result.text();
 			console.log((typeof content));
-			this.processData(content);
+			this.processData(nNames, content);
 		} catch (e) {
 			console.log(e);
-			let content = [];
+			let content = "";
 			console.log(typeof content);
-			this.processData(content);
+			// TODO FIXME did not test for error condition
+			this.processData(nNames, content);
 		}
 	};
 
-	async readData() {
+	async readData(nNames) {
 		let content  = await loadLocalResource(myResource);
-		this.processData(content);
+		this.processData(nNames, content);
 	}
 
-	processData(content) {
-		console.log("myResource was loaded! " + content);
+	processData(nNames, content) {
+		console.log("myResource was loaded! " + content.substring(0, 20));
 		let names = content.split("\r\n");
 		console.log(names[0]);
 		let values = {};
@@ -104,7 +105,7 @@ class HomeScreen extends Component {
 			deletes[el] = el;
 		});
 		// This part is just trying to make each item a different height
-		for (let i = 0; i < MAX; i++) {
+		for (let i = 0; i < nNames; i++) {
 			let n = names[i];
 			let splitarr = n.split(",");
 			let letter = splitarr[0][0];
@@ -189,8 +190,10 @@ class HomeScreen extends Component {
 				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>
 
-			<PButton title={'Read Data'} color='green' onPress={this.readData} />
-			<PButton title={'Fetch Data From Server'} color='green' onPress={this.fetchNames} />
+			<PButton title={'Read 100 Names'} color='green' onPress={() => { this.readData(100); }} />
+			<PButton title={'Fetch 100 Names From Server'} color='green' onPress={() => { this.fetchNames(250); }} />
+			<PButton title={'Read 250 Names'} color='green' onPress={() => { this.readData(250); }} />
+			<PButton title={'Fetch 250 Names From Server'} color='green' onPress={() => { this.fetchNames(250); }} />
 			<PButton title={'Main Screen'}
 				onPress={() => this.props.navigation.navigate('Main',
 					{ names : this.state.names, listNames : this.state.listNames, rework : false })} />
