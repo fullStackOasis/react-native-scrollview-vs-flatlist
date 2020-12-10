@@ -155,6 +155,10 @@ console.log("NamesList called setState 1");
    * Render an item in the list of items. Each of the items is in a section for the
    * letter that it starts with. For example, an item with the name "Ruby" will appear
    * in the section under "R".
+   * 
+   * This method is called many times; like 25 times, for every
+   * name in the list. See notes in SWAlphabetFlatList.handleChildLayout
+   * 
    * @param {Object} item is for example, {"name":"Ruby","description":"Ruby","id":4}
    * @param {Number} index index within each section, a number between 0 and n,
    * can be repeated for different sections of the alphabet, but only one index per

@@ -109,9 +109,9 @@ class FlatMainScreen extends Component {
 		}*/
 		let progressBar = null;
 		if (this.state.progress) {
-			progressBar = <TextWrapper>Loading</TextWrapper>;
+			progressBar = <TextWrapper>Laying out views</TextWrapper>;
 		} else {
-			progressBar = <TextWrapper>Finished loading</TextWrapper>;
+			progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
 		}
 		return (
 			<FlatMainScreenWrapper onLayout={this.onLayout}>

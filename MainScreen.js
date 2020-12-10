@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Text } from 'react-native';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
 import {NavigationEvents} from 'react-navigation';
@@ -102,9 +102,9 @@ class MainScreen extends Component {
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		let progressBar = null;
 		if (this.state.progress) {
-			progressBar = <TextWrapper>Loading</TextWrapper>;
+			progressBar = <TextWrapper>Laying out views</TextWrapper>;
 		} else {
-			progressBar = <TextWrapper>Finished loading</TextWrapper>;
+			progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
 		}
 		return (
 			<MainScreenWrapper  onLayout={this.onLayout}>

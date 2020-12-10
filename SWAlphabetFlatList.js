@@ -145,7 +145,8 @@ export default class SWAlphabetFlatList extends Component {
 	 * 
 	 * TODO FIXME. This method gets called for every new letter that's laid out.
 	 * If you've got 27 letters, then this method calls setState every single time it's called,
-	 * and that triggers a re-render, even though this component is not ready to be re-rendered.
+	 * and that triggers a re-render, even though this component is not ready to be re-rendered!
+	 * TODO FIXME! That means the entire ScrollView may get laid out 27 times! A major inefficiency.
 	 * 
 	 * @param {data} Object with an id property that is a letter, like "C", a height, width, x, and y value
 	 */
@@ -167,7 +168,12 @@ export default class SWAlphabetFlatList extends Component {
 		//console.warn("SW Hello! handleChildLayout looks for renderEach " + (typeof this.renderEach));
 	}
 
+  /**
+   * This render method is called about 25 times for our large list.
+   * For each letter - see handleChildLayout
+   */
   render() {
+	console.log("SWAlphabetFlatList.RENDER");
 	console.log("SWAlphabetFlatList.render: this.state.titles " + JSON.stringify(this.state.titles));
 	console.log("SWAlphabetFlatList.render: this.props " + JSON.stringify(this.props));
 	console.log("SWAlphabetFlatList.render: this.props.titles " + JSON.stringify(this.props.titles));
@@ -188,7 +194,10 @@ export default class SWAlphabetFlatList extends Component {
           }}
           {...this.props}>
           {this.props.renderHeader ? this.props.renderHeader() : null}
-          {this.props.titles.map(item => this.renderItem(item))}
+          {this.props.titles.map((item) => {
+			  console.log('xxx ' + JSON.stringify(item));
+			  return this.renderItem(item);
+		  })}
         </ScrollView>
         <AlphabetListView
           container={ref => (this.alphabet = ref)}
