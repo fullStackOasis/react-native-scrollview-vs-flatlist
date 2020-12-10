@@ -24,9 +24,11 @@ export default class SWAlphabetFlatListRework extends Component {
 		sectionHeaderComponent: SectionHeader
   };
 
-  componentDidMount() {
-    this.refreshBaseData(this.props.data);
-  }
+	componentDidMount() {
+		if (this.props.onRef != null) {
+			this.props.onRef(this)
+		}
+	}
 
   /**
    * @param data
@@ -40,56 +42,33 @@ export default class SWAlphabetFlatListRework extends Component {
     });
   };
 
-  /**
-   * Get the height of the list area, used to calculate the display of the letter list
-   */
-  onLayout = ({ nativeEvent: { layout } }) => {
-    // Ensure that the position coordinates are obtained after the navigation animation is completed, otherwise it will be inaccurate
-    InteractionManager.runAfterInteractions(() => {
-      this.alphabet.measure((x, y, w, h, px, py) => {
-		console.log("SW called setState B");
-        this.setState({
-          pageY: py
-        });
-      });
-	});
-	console.log("SW called setState C");
-    this.setState({
-      containerHeight: layout && layout.height
-    });
-  };
+	/**
+	 * Get the height of the list area, used to calculate the display of the letter list
+	 */
+	onLayout = ({ nativeEvent: { layout } }) => {
+		// Ensure that the position coordinates are obtained after the navigation animation is completed, otherwise it will be inaccurate
+		InteractionManager.runAfterInteractions(() => {
+			this.alphabet.measure((x, y, w, h, px, py) => {
+			this.setState({
+				pageY: py
+			});
+			});
+		});
 
-  /**
-   * Tap the letter to trigger scroll
-   */
+		this.setState({
+			containerHeight: layout && layout.height
+		});
+	};
+
+	/**
+	 * Tap the letter to trigger scroll
+	 */
 	onSelect(index) {
-		console.log("SW titles from props: " + this.props.titles);
-		console.log(this.refs);
-		console.log(this.ref);
+		console.log("SWAlphabetFlatListRework.onSelect this.props.titles: " + this.props.titles);
 		if (this.props.titles[index]) {
-			let title = this.props.titles[index]; // e.g. "T"
-			console.log("XXXX " + title);
-
-			// No longer using getItemLayout; it assumed fixed height on each item
-			// const { length, offset } = this.getItemLayout(index);
-			// this.list.scrollTo({ x: 0, y: offset, animated: false });
-			let data = this.state.dataSourceCoordinates[title];
-			let offset = data.y;
-			console.log("XXXX offset " + offset);
-			let headerHeight = this.props.headerHeight || 0;
-			offset = offset - headerHeight;
-			this.list.scrollTo({ x: 0, y: offset, animated: false });
-			this.touchedTime = new Date().getTime();
-
-			// Only emit when different index has been selected
-			if (this.oldIndex !== index) {
-				this.oldIndex = index;
-				this.props.onSelect ? this.props.onSelect(index) : null;
-				console.log("SW called setState D");
-				this.setState({
-					selectAlphabet: this.state.titles[index]
-				});
-			}
+			// let title = this.props.titles[index]; // e.g. "T"
+			// See API https://reactnative.dev/docs/sectionlist#scrolltolocation
+			this.sectionList.scrollToLocation({ sectionIndex : index, itemIndex : 0});
 		}
 	};
 
@@ -140,6 +119,7 @@ export default class SWAlphabetFlatListRework extends Component {
 		}
 		this.refreshBaseData = this.refreshBaseData.bind(this);
 		this.onSelect = this.onSelect.bind(this);
+		this.sectionList = null;
 	}
 	
 	/**
@@ -178,6 +158,7 @@ export default class SWAlphabetFlatListRework extends Component {
     return (
 		<SafeAreaView>
 			<SectionList
+				ref={input => this.sectionList = input}
 				sections={this.props.sections}
 				renderItem={(item) => <Item title={item["item"]["name"]} />}
 				renderSectionHeader={({ section: { title } }) => (
