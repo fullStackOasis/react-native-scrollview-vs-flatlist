@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-import { Dimensions, Platform } from 'react-native';
-import loadLocalResource from 'react-native-local-resource';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
+import {NavigationEvents} from 'react-navigation';
 // It's surprising how difficult it was to find how to read and import a local file!
 // https://github.com/IgorBelyayev/React-Native-Local-Resource
-import myResource from './assets/yob2019.txt';
+import ProgressBar from 'react-native-progress/Bar';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -56,8 +55,23 @@ class FlatMainScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			names : {}
+			names : {},
+			progress : false
 		};
+		this.showProgressBar = this.showProgressBar.bind(this);
+		this.hideProgressBar = this.hideProgressBar.bind(this);
+	}
+
+	showProgressBar() {
+		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		console.log("SHOWED");
+		this.setState({progress : true});
+	}
+
+	hideProgressBar() {
+		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		console.log("SHOWED");
+		this.setState({progress : false});
 	}
 
 	render() {
@@ -67,8 +81,19 @@ class FlatMainScreen extends Component {
 		let rework = navigation.getParam('rework');
 		console.log("FFFF sending listData as sections = " + JSON.stringify(listData));
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
+		let progressBar = null;
+		if (this.state.progress) {
+			progressBar = <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+		}
 		return (
 			<FlatMainScreenWrapper>
+			<NavigationEvents
+			onDidFocus={this.showProgressBar}
+			onWillFocus={payload => console.log('will focus', payload)}
+			onWillBlur={this.hideProgressBar}
+			onDidBlur={payload => console.log('did blur', payload)}
+			/>
+			{progressBar}
 			<ContentView
 			  size="small"
 			  tabs={true}

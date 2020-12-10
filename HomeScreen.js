@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 import { Dimensions, Platform } from 'react-native';
 import loadLocalResource from 'react-native-local-resource';
 import styled from 'styled-components/native';
-import NamesList from './NamesList';
 // It's surprising how difficult it was to find how to read and import a local file!
 // https://github.com/IgorBelyayev/React-Native-Local-Resource
 import myResource from './assets/yob2019.txt';
 import PButton from './PButton';
+//import ProgressBar from 'react-native-progress/Bar';
+import {NavigationEvents} from 'react-navigation';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -58,14 +60,35 @@ class HomeScreen extends Component {
 		super(props);
 		this.state = {
 			names : {},
-			countNames : 0
+			countNames : 0,
+			mounted : false
 		};
 		this.readData = this.readData.bind(this);
-	}
+		this.fetchNames = this.fetchNames.bind(this);
+		this.processData = this.processData.bind(this);
+	};
+
+	async fetchNames() {
+		let result = await fetch('https://fullstackoasis.com/biglist/names/yob2019.txt');
+		try {
+			let content = await result.text();
+			console.log((typeof content));
+			this.processData(content);
+		} catch (e) {
+			console.log(e);
+			let content = [];
+			console.log(typeof content);
+			this.processData(content);
+		}
+	};
 
 	async readData() {
 		let content  = await loadLocalResource(myResource);
-		console.log("myResource was loaded!");
+		this.processData(content);
+	}
+
+	processData(content) {
+		console.log("myResource was loaded! " + content);
 		let names = content.split("\r\n");
 		console.log(names[0]);
 		let values = {};
@@ -151,12 +174,23 @@ class HomeScreen extends Component {
 		console.log("Going to render HOMESCREEN " + JSON.stringify(this.state.names));
 		console.log("Going to render HOMESCREEN this.state.names.length " + JSON.stringify(this.state.countNames));
 		//let text = "hello World";//(this.state.names && this.state.names.length) ? this.state.names[0] :'No names found';
+		/*
+		let progressBar = null;
+		if (this.state.mounted) {
+			progressBar = <ProgressBar progress={0.3} indeterminate={true} width={null} />
+			{progressBar}
+
+		}*/
 		return (
 			<HomeScreenWrapper>
+				
+			<NavigationEvents onDidFocus={() => console.log('I am triggered')} />				
 			<View style={styles.title}>
 				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>
+
 			<PButton title={'Read Data'} color='green' onPress={this.readData} />
+			<PButton title={'Fetch Data From Server'} color='green' onPress={this.fetchNames} />
 			<PButton title={'Main Screen'}
 				onPress={() => this.props.navigation.navigate('Main',
 					{ names : this.state.names, listNames : this.state.listNames, rework : false })} />

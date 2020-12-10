@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-import { Dimensions, Platform } from 'react-native';
-import loadLocalResource from 'react-native-local-resource';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
+import {NavigationEvents} from 'react-navigation';
 // It's surprising how difficult it was to find how to read and import a local file!
 // https://github.com/IgorBelyayev/React-Native-Local-Resource
-import myResource from './assets/yob2019.txt';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -66,6 +64,7 @@ class MainScreen extends Component {
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		return (
 			<MainScreenWrapper>
+				<NavigationEvents onDidFocus={() => console.log('I am triggered MainScreen')} />
 			<ContentView
 			  size="small"
 			  tabs={true}
