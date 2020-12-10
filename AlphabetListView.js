@@ -13,7 +13,6 @@ export function AlphabetListView({ onLayout, container, contentHeight, pageY, ti
   const onTouchChange = (evt, type) => {
     const event = evt.nativeEvent || {};
     const index = Math.floor((event.pageY - pageY) / itemHeight);
-
     if (index >= 0 && titles[index]) {
       if (toast) {
         setTimeout(() => {
@@ -71,6 +70,7 @@ export function AlphabetListView({ onLayout, container, contentHeight, pageY, ti
         zIndex: 10
       }}
       {...responder.panHandlers}>
+      {/* each item() returns a ListFilterItem */}
       {titles.map((title, index) => item({ title, active: selectAlphabet === title }))}
     </View>
   );
