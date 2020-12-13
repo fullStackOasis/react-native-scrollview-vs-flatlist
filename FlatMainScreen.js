@@ -143,6 +143,7 @@ class FlatMainScreen extends Component {
 			>
 			</NamesList>
 			</ContentView>
+			<TextWrapper>Hello Footerville</TextWrapper>
 			</FlatMainScreenWrapper>
 		)
 	}

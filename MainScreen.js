@@ -136,6 +136,7 @@ class MainScreen extends Component {
 			>
 			</NamesList>
 			</ContentView>
+			<TextWrapper>Hello Footerville</TextWrapper>
 			</MainScreenWrapper>
 		)
 	}
