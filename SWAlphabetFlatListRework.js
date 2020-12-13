@@ -94,18 +94,27 @@ export default class SWAlphabetFlatListRework extends Component {
 	}
 
   /**
-   * @param{String} item is the header for this section, like "A", "B", etc.
+   * Renders individual items in each section.
+   * @param {item} Object {"name":"Anna","description":"Anna","detail":"F","id":7}
+   * @param {index} Number for example, 7. This index starts at 0 for each item in section.
+   * @param {section} Object {"title":"A","data":[{"name":"Aaliyah","description":"Aaliyah","id":0}...
+   * Get the title for the section from this, if you need it.
    */
-	renderItem(item) {
-		console.log("SW renderItem item = " + JSON.stringify(item));
+	renderItem(data) {
+		let {item, index, section, separators} = {...data};
+		console.log("--------X");
+		console.log("SWARework renderItem item = " + JSON.stringify(item));
+		console.log("SWARework renderItem index = " + JSON.stringify(index));
+		console.log("SWARework renderItem section = " + JSON.stringify(section));
+		//console.log("SWARework renderItem item = " + JSON.stringify(this.props.sectionHeaderComponent));
+		console.log("--------Y");
+		console.log(this.props.renderItem);
 		// this.props.data is something like {"A":[{"name":"Edith Abbott","id":1}, ...}
-		return (<KeyedView key={item} item={item}
-			sectionHeader={this.props.sectionHeaderComponent}
+		return this.props.renderItem({item, index, sectionId : section.title});
+		/*return (<View key={item.name} item={item}
 			data={this.props.data}
-			handleSectionHeaderLayout={this.handleSectionHeaderLayout}
-			renderItem={this.props.renderItem}
-			handleChildLayout={this.handleChildLayout}
-		/>);
+			sectionId={section.title}
+		><Text>{item.name}</Text></View>);*/
 	};
 
 	constructor(props) {
@@ -120,7 +129,9 @@ export default class SWAlphabetFlatListRework extends Component {
 		this.refreshBaseData = this.refreshBaseData.bind(this);
 		this.onSelect = this.onSelect.bind(this);
 		this.sectionList = null;
+		this.renderItem = this.renderItem.bind(this);
 	}
+	
 	
 	/**
 	 * Example of what input data may look like:
@@ -153,6 +164,11 @@ export default class SWAlphabetFlatListRework extends Component {
   render() {
 	console.log("SWAlphabetFlatListRework.render: this.state.titles " + JSON.stringify(this.state.titles));
 	console.log("SWAlphabetFlatListRework.render: this.props.sections " + JSON.stringify(this.props.sections));
+	// this.props.sections example:
+	// [ {"title":"A","data":[{"name":"Aaliyah","description":"Aaliyah","id":0},
+	//   {"title":"Z","data":[{"name":"Zoe","description":"Zoe","id":0},
+	//                        {"name":"Zoey","description":"Zoey","detail":"F","id":1}]} ]
+	// A "Section" Object has a title property and a data property. The data property is an array exemplified above.
 	console.log("SWAlphabetFlatListRework.render: this.props.titles " + JSON.stringify(this.props.titles));
 	// At this point, titles are obtained as props from the parent component.
     return (
@@ -160,11 +176,19 @@ export default class SWAlphabetFlatListRework extends Component {
 			<SectionList
 				ref={input => this.sectionList = input}
 				sections={this.props.sections}
-				renderItem={(item) => <Item title={item["item"]["name"]} />}
+				//renderItem={(item) => <Item title={item["item"]["name"]} />}
+				renderItem={this.renderItem}
 				renderSectionHeader={({ section: { title } }) => (
 					<Text style={styles.header}>{title}</Text>
 				)}
-				keyExtractor={(item, index) => item + index}
+				keyExtractor={(item, index) => {
+					console.log(item);
+					console.log(index);
+					return item + index;
+				}}
+				/*getItemLayout={(data, index) => (
+					{length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+				)}*/
 			>
 			</SectionList>
 			<AlphabetListView
@@ -181,69 +205,6 @@ export default class SWAlphabetFlatListRework extends Component {
     );
   }
 }
-
-
-/**
- * KeyedView is a View that has a unique id, it encloses each SectionHeader, and everything in the section under it.
- */
-class KeyedView extends React.Component {
-	constructor(props) {
-		super(props);
-		// this.props.item is expected to be a letter, like "T"
-	}
-	/**
-	 * The onLayout method here is used to propagate properties, in particular y,
-	 * to the container/parent, so scrolling to the section header can be done
-	 * correctly.
-	 */
-	handleOnLayout = (e) => {
-		let obj = {
-			id: this.props.item, // e.g. "T"
-			width: e.nativeEvent.layout.width,
-			height: e.nativeEvent.layout.height,
-			x: e.nativeEvent.layout.x,
-			y: e.nativeEvent.layout.y // layout position of this SectionHeader. Hopefully! e.g. 160.57142639160156,
-		}
-		this.props.handleChildLayout(obj);
-	}
-
-	render () { 
-		// TODO FIXME height is artificially set to 25.
-		let h = 25;
-		let item = this.props.item;
-		let sectionId = item; // e.g. "T"
-		const MSectionHeader = this.props.sectionHeader;
-		// TODO FIXME
-		// Getting an ERROR message "Warning: Each child in a list should have a unique "key" prop."
-		// these do not help:
-		//let viewKey = "swView" + item;
-		//let sectionHeaderKey = "swSectionHeader" + item;
-		// item is NOT {"item":{"name":"Alex Tabarrok","id":20},"index":0,"sectionId":"T","last":false}
-		// item is "T" for example
-		// data is {"A":[{"name":"Edith Abbott","id":1},
-		//			{"name":"Kenneth Arrow","id":2}],
-		//          "B":[{"name":"Robert Barro","id":3},...
-		// Useful for debugging:
-		// this.props.data[sectionId].map((itemValue, itemIndex, items) => console.warn(JSON.stringify(itemValue) + ", " + itemIndex + ", item " + item));
-		return (<View onLayout={this.handleOnLayout}>
-		<MSectionHeader height={h} h={h} title={item} handleSectionHeaderLayout={this.props.handleSectionHeaderLayout}/>
-		{this.props.data[sectionId].map((itemValue, itemIndex, items) =>
-			this.props.renderItem({
-				item: itemValue,
-				index: itemIndex,
-				sectionId: item,
-				last: itemIndex === items.length - 1
-			})
-		)}
-		</View>);
-	}
-};
-
-const Item = ({ title }) => (
-	<View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-	</View>
-);
 
 const styles = StyleSheet.create({
 	container: {
