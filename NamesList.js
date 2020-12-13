@@ -165,7 +165,7 @@ console.log("NamesList called setState 1");
    * item within each section
    */
   renderItem({ item, index, sectionId }) {
-	  console.log("NamesList renderItem " + JSON.stringify({...item}));
+	  console.log("NamesList renderItem " + JSON.stringify(item));
 	return <ListItem
 	{...item}
 	key={index}
@@ -215,11 +215,11 @@ console.log("NamesList called setState 1");
 			  onSelect={this.respondToSelect}
 			  headerHeight={headerHeight}
 			  sectionItemComponent={this.sectionItemComponent}
-			  sectionHeaderComponent={({ title }) => (
-				  <ListHeader border={false} padding={true}>
-				  {title}
-				  </ListHeader>
-			  )}
+			  sectionHeaderComponent={() => (
+				<ListHeader border={false} padding={true}>
+				ABC DOES NOTHING??
+				</ListHeader>
+				)}
 			  ListHeaderComponent={this.renderHeader}
 			  style={{
 				  flex: 1
@@ -247,11 +247,12 @@ console.log("NamesList called setState 1");
 		onSelect={this.respondToSelect}
 		headerHeight={headerHeight}
 		sectionItemComponent={this.sectionItemComponent}
-		sectionHeaderComponent={({ title }) => (
+		sectionHeaderComponent={({ title }) => {
+			return (
 			<ListHeader border={false} padding={true}>
-			{title}
+			{title + "ABC DOES NOTHING??"}
 			</ListHeader>
-        )}
+        )}}
 		ListHeaderComponent={this.renderHeader}
 		style={{
 			flex: 1
