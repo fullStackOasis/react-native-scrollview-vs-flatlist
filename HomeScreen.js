@@ -166,6 +166,8 @@ class HomeScreen extends Component {
 				[{"name":"Olivia","description":"Olivia","detail":"F","id":0}]
 			}
 		*/
+		//console.log("listValues");
+		//console.log(JSON.stringify(listValues));
 		this.setState({names : values, countNames : countNames, listNames : listValues});
 	}
 
