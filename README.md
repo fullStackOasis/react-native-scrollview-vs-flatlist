@@ -1,3 +1,5 @@
+# React Native ScrollView vs FlatList
+
 The general idea is to test performance of ScrollView vs FlatList
 
 See https://reactnative.dev/docs/scrollview
@@ -19,3 +21,11 @@ Tap a button to load 250 names from my server or from in-app. Then:
 This code is licensed with an MIT License.
 
 [YouTube video that is run off commit d532ace](https://youtu.be/vI_fuE-J73A)
+
+# Invariant Violation: scrollToIndex should be used in conjunction with getItemLayout or onScrollToIndexFailed, otherwise there is no way to know the location of offscreen indices or handle failures.
+
+Demo at commit 6eba6d0 includes a bug. If you click a letter in the vetical alphabet list on the "Flat Main Screen" page, you get an "Invariant Violation" error. However, that only happens if the second time you navigate to the page.
+
+This error is discussed in a StackOverflow post, but without any good solution. The problem is that this page may have items in the list that have different heights. You can't know initially how big each item is, so you can know where to scroll in the list.
+
+https://stackoverflow.com/questions/53059609/flat-list-scrolltoindex-should-be-used-in-conjunction-with-getitemlayout-or-on
