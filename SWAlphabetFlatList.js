@@ -120,6 +120,7 @@ export default class SWAlphabetFlatList extends Component {
 		return (<KeyedView key={item} item={item}
 			sectionHeader={this.props.sectionHeaderComponent}
 			data={this.props.data}
+			showAlpha={this.props.showAlpha}
 			handleSectionHeaderLayout={this.handleSectionHeaderLayout}
 			renderItem={this.props.renderItem}
 			handleChildLayout={this.handleChildLayout}
