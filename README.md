@@ -24,8 +24,22 @@ This code is licensed with an MIT License.
 
 # Invariant Violation: scrollToIndex should be used in conjunction with getItemLayout or onScrollToIndexFailed, otherwise there is no way to know the location of offscreen indices or handle failures.
 
-Demo at commit 6eba6d0 includes a bug. If you click a letter in the vetical alphabet list on the "Flat Main Screen" page, you get an "Invariant Violation" error. However, that only happens if the second time you navigate to the page.
+Demo at commit 6eba6d0 includes a bug. If you click a letter in the vertical alphabet list on the "Flat Main Screen" page, you **may** get an "Invariant Violation" error. It happens if you click a letter that links to a section that has not yet been rendered.
 
 This error is discussed in a StackOverflow post, but without any good solution. The problem is that this page may have items in the list that have different heights. You can't know initially how big each item is, so you can know where to scroll in the list.
 
 https://stackoverflow.com/questions/53059609/flat-list-scrolltoindex-should-be-used-in-conjunction-with-getitemlayout-or-on
+
+# Notes about SectionList
+
+Documentation for SectionList - how to use it as it is intended - is poor.
+
+See Jan Söndermann's article where he explains the meaning of `index` in `getItemLayout`: https://medium.com/@jsoendermann/sectionlist-and-getitemlayout-2293b0b916fb
+
+In our case, there index is simply a pointer to each component displayed within the `SafeAreaView` of `SWAlphaFlatListRework` so far as I can tell. It seems to include twice the number of section headers, and I haven't been able to figure out why yet.
+
+Source code suggests that `index` in `getItemLayout` has an extra increment, one for the footer and one for the header - even if you don't use those:
+https://github.com/facebook/react-native/blob/master/Libraries/Lists/VirtualizedSectionList.js#L132
+
+https://reactnative.dev/docs/sectionlist
+
