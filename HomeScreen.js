@@ -5,6 +5,7 @@ import loadLocalResource from 'react-native-local-resource';
 import styled from 'styled-components/native';
 // It's surprising how difficult it was to find how to read and import a local file!
 // https://github.com/IgorBelyayev/React-Native-Local-Resource
+//import myResource from './assets/yob2019A.txt';
 import myResource from './assets/yob2019.txt';
 import PButton from './PButton';
 //import ProgressBar from 'react-native-progress/Bar';
@@ -15,7 +16,9 @@ const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
 const NAV_OFFSET = 0;
 const OFFSET = 0;
-const MAX = 250;
+const MAX = 500;
+const CHOICE1 = 100;
+//const CHOICE1 = 60;
 const ContentView = styled.View`
   height: ${props =>
     windowHeight -
@@ -64,7 +67,8 @@ class HomeScreen extends Component {
 		this.state = {
 			names : {},
 			countNames : 0,
-			mounted : false
+			mounted : false,
+			mapNameIndexToLetterIndex : {}
 		};
 		this.readData = this.readData.bind(this);
 		this.fetchNames = this.fetchNames.bind(this);
@@ -92,11 +96,12 @@ class HomeScreen extends Component {
 	}
 
 	processData(nNames, content) {
-		console.log("myResource was loaded! " + content.substring(0, 20));
-		let names = content.split("\r\n");
+		console.log("Going to process " + nNames + " names");
+		let names = content.split("\n");
 		console.log(names[0]);
 		let values = {};
 		let counts = {};
+		let mapNameIndexToLetterIndex = {};
 		let caps = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 		caps.forEach(function(el) {
 			values[el] = []; // e.g. values["A"] is an empty array
@@ -109,15 +114,17 @@ class HomeScreen extends Component {
 		});
 		// This part is just trying to make each item a different height
 		for (let i = 0; i < nNames; i++) {
+			console.log(i);
 			let n = names[i];
 			let splitarr = n.split(",");
 			let letter = splitarr[0][0];
-			if (i % 2) {
-				values[letter].push({ name : splitarr[0], description : splitarr[0] });
-			} else {
-				values[letter].push({ name : splitarr[0], description : splitarr[0], detail : "" + splitarr[1] });
-			}
+			//if (i % 2) {
+			values[letter].push({ name : splitarr[0], description : splitarr[0] });
+			//} else {
+			//	values[letter].push({ name : splitarr[0], description : splitarr[0], detail : "" + splitarr[1] });
+			//}
 			delete deletes[letter]; // save for delete later.
+			console.log(i + " " + JSON.stringify(splitarr[0]));
 		}
 		console.log(JSON.stringify(deletes));
 		// Sort within each letter of the alphabet.
@@ -130,14 +137,23 @@ class HomeScreen extends Component {
 		});
 		let ourLetters = Object.keys(values);
 		console.log(ourLetters);
+		let countLetters = 0;
 		ourLetters.forEach(function(letter) {
+			mapNameIndexToLetterIndex[countNames] = countLetters;
+			countNames++;
 			values[letter].forEach(function(v) {
 				id = counts[letter]++;
+				mapNameIndexToLetterIndex[countNames] = countLetters;
 				countNames++;
+				console.log(letter + ' countNames ' + countNames + ' ' + v);
 				v.id = id;
 			})
+			mapNameIndexToLetterIndex[countNames] = countLetters;
+			countNames++;
+			countLetters++;
 		});
-		console.log(JSON.stringify(values));
+		//console.log(JSON.stringify(values));
+		console.log("mapNameIndexToLetterIndex " + JSON.stringify(mapNameIndexToLetterIndex));
 
 		// listValues is used for SectionList, https://reactnative.dev/docs/sectionlist
 		// This is an attempt to make the app more efficient.
@@ -168,7 +184,8 @@ class HomeScreen extends Component {
 		*/
 		//console.log("listValues");
 		//console.log(JSON.stringify(listValues));
-		this.setState({names : values, countNames : countNames, listNames : listValues});
+		this.setState({names : values, countNames : countNames, listNames : listValues,
+			mapNameIndexToLetterIndex : mapNameIndexToLetterIndex});
 	}
 
 	render() {
@@ -195,7 +212,7 @@ class HomeScreen extends Component {
 				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>
 
-			<PButton title={'Read 100 Names in-app'} color='darkgreen' onPress={() => { this.readData(100); }} />
+			<PButton title={'Read ' + CHOICE1 + ' Names in-app'} color='darkgreen' onPress={() => { this.readData(CHOICE1); }} />
 			<PButton title={'Fetch 100 Names From Server'} color='mediumseagreen' backgroundcolor='black' onPress={() => { this.fetchNames(250); }} />
 			<PButton title={'Read 250 Names in-app'} color='darkgoldenrod' onPress={() => { this.readData(250); }} />
 			<PButton title={'Fetch 250 Names From Server'} color='chocolate' onPress={() => { this.fetchNames(250); }} />
@@ -204,7 +221,8 @@ class HomeScreen extends Component {
 					{ names : this.state.names, listNames : this.state.listNames, rework : false, showAlpha: true })} />
 			<PButton title={'Flat Main Screen'} color='blueviolet'
 				onPress={() => this.props.navigation.navigate('FlatMain',
-					{ names : this.state.names, listNames : this.state.listNames, rework : true })} />
+					{ names : this.state.names, listNames : this.state.listNames, rework : true,
+						mapNameIndexToLetterIndex : this.state.mapNameIndexToLetterIndex })} />
 			<PButton title={'Main Screen No Alpha'} color='darkblue'
 				onPress={() => this.props.navigation.navigate('Main',
 					{ names : this.state.names, listNames : this.state.listNames, rework : true, showAlpha: false })} />

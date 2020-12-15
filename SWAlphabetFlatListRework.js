@@ -6,7 +6,6 @@ import { AlphabetListView } from './AlphabetListView';
 import { SectionListItem } from './SectionListItem';
 const Constants = {
 	statusBarHeight : 10
-
 };
 /**
  * See similar code in https://github.com/UseAllFive/react-native-alphabet-flat-list
@@ -61,14 +60,19 @@ export default class SWAlphabetFlatListRework extends Component {
 	};
 
 	/**
-	 * Tap the letter to trigger scroll
+	 * Tap the letter to trigger scroll.
+	 * If index is 0, then scrolls to "A" section header.
+	 * If index is 1, then scrolls to "B" section header (or at least the second one).
+	 * If index is 2, then scrolls to "C" section header.
 	 */
 	onSelect(index) {
-		console.log("SWAlphabetFlatListRework.onSelect this.props.titles: " + this.props.titles);
+		console.log("SWAlphabetFlatListRework.onSelect this.props.titles: " + this.props.titles + ", index=" + index);
+		// for example, this.props.titles is ["A", "B", "C",...]
 		if (this.props.titles[index]) {
 			// let title = this.props.titles[index]; // e.g. "T"
 			// See API https://reactnative.dev/docs/sectionlist#scrolltolocation
-			this.sectionList.scrollToLocation({ sectionIndex : index, itemIndex : 0});
+			this.sectionList.scrollToLocation({ sectionIndex : index,
+				itemIndex : 0, animated: true});
 		}
 	};
 
@@ -171,24 +175,58 @@ export default class SWAlphabetFlatListRework extends Component {
 	// A "Section" Object has a title property and a data property. The data property is an array exemplified above.
 	console.log("SWAlphabetFlatListRework.render: this.props.titles " + JSON.stringify(this.props.titles));
 	// At this point, titles are obtained as props from the parent component.
+	let ITEM_HEIGHT = this.props.itemHeight;
+	let mapNameIndexToLetterIndex = this.props.mapNameIndexToLetterIndex || {};
+	console.log("itemHeight " + this.props.itemHeight);
+	console.log("aaa " + JSON.stringify(this.props.mapNameIndexToLetterIndex));
+	let sections = this.props.sections;
+	///sections = [{"title":"A","data":[]}];
+	//sections = [{"title":"A","data":[{"name":"Aaliyah","description":"Aaliyah","id":0}]},{"title":"B","data":[{"name":"Butt","description":"Butt","id":0}]}];
+	// sections = []; <- never calls getItemLayout
+	//sections = [{"title":null, "data":[]}];
     return (
 		<SafeAreaView>
 			<SectionList
+				useNativeDriver={true}
+				blah={true}
 				ref={input => this.sectionList = input}
-				sections={this.props.sections}
+				sections={sections}
 				//renderItem={(item) => <Item title={item["item"]["name"]} />}
 				renderItem={this.renderItem}
-				renderSectionHeader={({ section: { title } }) => (
-					<Text style={styles.header}>{title}</Text>
-				)}
-				keyExtractor={(item, index) => {
-					console.log(item);
-					console.log(index);
-					return item + index;
+				//renderSectionHeader={({ section: { title } }) => {
+				renderSectionHeader={(d) => {
+					console.log("Going to return the d " + JSON.stringify(d));
+					// Input d is like {"section":{"title":"A","data":[{"name":"Aaliyah","description":"Aaliyah","id":0}]}}
+					let title = d.section.title;
+					//return <Text style={styles.header}>{title}</Text>
+					//return <Text style={{height:75}}>{title}</Text>
+					let h = ITEM_HEIGHT;
+					return <Text style={{height:h}}>{title}</Text>
 				}}
-				/*getItemLayout={(data, index) => (
-					{length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
-				)}*/
+				keyExtractor={(item, index) => {
+					let key = item + index;
+					console.log(key);
+					return key;
+				}}
+				getItemLayout={(data, index) => {
+					console.log("index is " + index + ", data = " + JSON.stringify(data));
+					console.log("index, this.props.sectionHeaderHeight is " + index + ", " + JSON.stringify(this.props.sectionHeaderHeight));
+					let nSections = mapNameIndexToLetterIndex[index] || 0;
+					console.log("nSections is " + nSections);
+					// This works very well. Why does +27 have to be added to each section?
+					// I tested, and 28 seems a bit too much, while 26 seems a bit too little.
+					// When styles.header height property is not set, 27 is the correct magic number to add.
+					// let totalSectionHeaderHeight = nSections*(this.props.sectionHeaderHeight+27);
+					//let totalSectionHeaderHeight = nSections*(this.props.sectionHeaderHeight-75);
+					// When the renderSectionHeader returns a component with height 75,
+					// magic number is 65.
+					//let totalSectionHeaderHeight = nSections*(65);
+					let totalSectionHeaderHeight = nSections*(ITEM_HEIGHT);
+					console.log("totalSectionHeaderHeight is " + totalSectionHeaderHeight);
+					let x = {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index - totalSectionHeaderHeight, index};
+					console.log("ccc " + JSON.stringify(x));
+					return x;
+				}}
 			>
 			</SectionList>
 			<AlphabetListView
@@ -219,7 +257,8 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		fontSize: 32,
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
+		height:150
 	},
 	title: {
 		fontSize: 24

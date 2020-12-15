@@ -3,7 +3,8 @@ import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
 import {NavigationEvents} from 'react-navigation';
-import ProgressBar from 'react-native-progress/Bar';
+import FooterComponent from './FooterComponent';
+import TextWrapper from './TextWrapper';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -46,14 +47,6 @@ const ContentView = styled.View`
 const FlatMainScreenWrapper = styled.View`
   flex: 1;
   backgroundColor: transparent;
-`;
-
-const TextWrapper = styled.Text`
-  text-align: center;
-  background-color: black;
-  color: lightblue;
-  font-size: 22px;
-  margin: 1px;
 `;
 
 class FlatMainScreen extends Component {
@@ -101,6 +94,7 @@ class FlatMainScreen extends Component {
 		let data = navigation.getParam('names');
 		let listData = navigation.getParam('listNames');
 		let rework = navigation.getParam('rework');
+		let mapNameIndexToLetterIndex = navigation.getParam('mapNameIndexToLetterIndex');
 		console.log("FFFF sending listData as sections = " + JSON.stringify(listData));
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		/*let progressBar = null;
@@ -113,6 +107,7 @@ class FlatMainScreen extends Component {
 		} else {
 			progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
 		}
+		//progressBar = null;
 		return (
 			<FlatMainScreenWrapper onLayout={this.onLayout}>
 			<NavigationEvents
@@ -138,12 +133,13 @@ class FlatMainScreen extends Component {
 				sections={listData}
 				headerData={headerData}
 				insetPadding={true}
+				mapNameIndexToLetterIndex={mapNameIndexToLetterIndex}
 				onSwipeablePress={this._handleSwipeableButton}
 				containerHeight={this.height || windowHeight}
 			>
 			</NamesList>
 			</ContentView>
-			<TextWrapper>Hello Footerville</TextWrapper>
+			<FooterComponent/>
 			</FlatMainScreenWrapper>
 		)
 	}

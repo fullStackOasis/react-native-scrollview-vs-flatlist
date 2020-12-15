@@ -15,6 +15,7 @@ const ListHeaderView = styled.View`
   padding-bottom: 3px;
   justify-content: space-between;
   flex-direction: row;
+  height:120px;
 `;
 
 const ListHeaderText = styled.Text`

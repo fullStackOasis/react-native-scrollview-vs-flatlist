@@ -166,12 +166,16 @@ console.log("NamesList called setState 1");
    */
   renderItem({ item, index, sectionId }) {
 	  console.log("NamesList renderItem " + JSON.stringify(item));
-	return <ListItem
+	/*return <ListItem
 	{...item}
 	key={index}
 	selected={item.selected}
 	style={{ height : ITEM_HEIGHT, color: 'white', backgroundColor : 'navy'}}
-	/>
+	/>*/
+	return <Text
+	key={index}
+	selected={item.selected}
+	style={{ height : ITEM_HEIGHT, color: 'white', backgroundColor : 'navy'}}>{item.name}</Text>
   }
 
 	sectionItemComponent({ title, active }) {
@@ -190,6 +194,7 @@ console.log("NamesList called setState 1");
 	let noalpha = this.props.noalpha;
 	let data = this.props.data || ['No Names Found'];
 	let sections = this.props.sections || null;
+	let mapNameIndexToLetterIndex = this.props.mapNameIndexToLetterIndex || {};
 	console.log("NamesList this.props.showAlpha = " + this.props.showAlpha);
 	// titles is a list like ["A", "B", "D",...]
 	let titles = Object.keys(data);
@@ -201,6 +206,7 @@ console.log("NamesList called setState 1");
 			  <SWAlphabetFlatListRework
 			  ref={ref => (this.listView = ref)}
 			  data={data}
+			  mapNameIndexToLetterIndex={mapNameIndexToLetterIndex}
 			  sections={sections}
 			  titles={titles}
 			  itemHeight={ITEM_HEIGHT}
@@ -247,10 +253,12 @@ console.log("NamesList called setState 1");
 		onSelect={this.respondToSelect}
 		headerHeight={headerHeight}
 		sectionItemComponent={this.sectionItemComponent}
+		// sectionHeaderComponent is used by SWAlphabetFlatList
+		// It is not used by SWAlphabetFlatListRework
 		sectionHeaderComponent={({ title }) => {
 			return (
 			<ListHeader border={false} padding={true}>
-			{title + "ABC DOES NOTHING??"}
+			{title}
 			</ListHeader>
         )}}
 		ListHeaderComponent={this.renderHeader}

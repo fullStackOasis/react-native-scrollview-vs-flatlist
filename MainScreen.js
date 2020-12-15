@@ -3,7 +3,8 @@ import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
 import {NavigationEvents} from 'react-navigation';
-import ProgressBar from 'react-native-progress/Bar';
+import FooterComponent from './FooterComponent';
+import TextWrapper from './TextWrapper';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
@@ -46,14 +47,6 @@ const ContentView = styled.View`
 const MainScreenWrapper = styled.View`
   flex: 1;
   backgroundColor: transparent;
-`;
-
-const TextWrapper = styled.Text`
-  text-align: center;
-  background-color: black;
-  color: lightblue;
-  font-size: 22px;
-  margin: 1px;
 `;
 
 class MainScreen extends Component {
@@ -136,7 +129,7 @@ class MainScreen extends Component {
 			>
 			</NamesList>
 			</ContentView>
-			<TextWrapper>Hello Footerville</TextWrapper>
+			<FooterComponent/>
 			</MainScreenWrapper>
 		)
 	}
