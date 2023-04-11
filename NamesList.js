@@ -9,6 +9,31 @@ import SWAlphabetFlatList from './SWAlphabetFlatList';
 import SWAlphabetFlatListRework from './SWAlphabetFlatListRework';
 const ITEM_HEIGHT = 70;
 
+/**
+ * Takes input data used by SectionList and returns array of data for use by FlatList.
+ * SectionList data is an Object with keys mapped to arrays, like:
+ * {"A":{item...}, "B":{item...}} etc.
+ * Whereas FlatList just wants [{item..},{item..}].
+ *
+ * @param {*} data an input array intended for consumption by SectionList
+ * @returns Array of data for consumption by FlatList
+ */
+const getFlatListData = (data) => {
+  const result = [];
+  const values = Object.values(data);
+  values.forEach((val) => {
+    if (val instanceof Array) {
+      // recursively call this function to get items from array
+      let newData = getFlatListData(val);
+      result.push(...newData);
+    } else {
+      val.id = val.name;
+      result.push(val);
+    }
+  });
+  return result;
+};
+
 export default class NamesList extends React.Component {
   state = {
     items: {},
@@ -161,7 +186,8 @@ export default class NamesList extends React.Component {
    * item within each section
    */
   renderItem({ item, index, sectionId }) {
-    console.log('NamesList renderItem ' + JSON.stringify(item));
+    // Use for debugging.
+    // console.log('NamesList renderItem ' + JSON.stringify(item));
     /*return <ListItem
 	{...item}
 	key={index}
@@ -238,11 +264,13 @@ export default class NamesList extends React.Component {
       );
     }
     if (this.props.flatList) {
-      console.log('Hello...');
+      const processedData = getFlatListData(data);
+      console.log('NamesList finished processing input data');
+      // data is not properly formatted for display in a FlatList.
       return (
         <React.Fragment>
           <FlatList
-            data={data}
+            data={processedData}
             keyExtractor={(item) => item.id}
             renderItem={this.renderItem}></FlatList>
         </React.Fragment>
