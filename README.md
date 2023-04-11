@@ -42,5 +42,3 @@ Source code suggests that `index` in `getItemLayout` has an extra increment, one
 https://github.com/facebook/react-native/blob/master/Libraries/Lists/VirtualizedSectionList.js#L132
 
 https://reactnative.dev/docs/sectionlist
-
-Test
