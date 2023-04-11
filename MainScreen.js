@@ -52,7 +52,6 @@ class MainScreen extends Component {
   /** Lifecycle methods */
   constructor(props) {
     super(props);
-    console.log('constructor MainScreen has props: ' + JSON.stringify(props));
     this.state = {
       names: {},
       progress: false,
@@ -90,13 +89,10 @@ class MainScreen extends Component {
 
   render() {
     if (!this.props?.route?.params?.names) {
-      console.log('Returning null ...' + JSON.stringify(this.props));
       return null;
     }
-    console.log(
-      'NOT Returning null ...' + JSON.stringify(this.props.route.params)
-    );
     let data = this.props.route.params.names;
+    console.log('MainScreen.render. data.length = ' + data?.length);
     let showAlpha = this.props.route.params.showAlpha;
     let headerData = {
       A: [{ id: 11, name: 'Aaliyah', description: 'Aaliyah' }],
@@ -130,6 +126,7 @@ class MainScreen extends Component {
             /*ref={ref => (this.contactList = ref)}*/
             data={data}
             showAlpha={Boolean(showAlpha)}
+            flatList={Boolean(this.props.route.params.flatList)}
             headerData={headerData}
             insetPadding={true}
             onSwipeablePress={this._handleSwipeableButton}

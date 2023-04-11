@@ -1,5 +1,5 @@
 import React from 'react';
-import { DeviceEventEmitter, Text, View } from 'react-native';
+import { DeviceEventEmitter, Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { ListItem } from './ListItem';
 import { ListHeader } from './ListHeader';
@@ -194,17 +194,14 @@ export default class NamesList extends React.Component {
   }
 
   render() {
-    console.log('NamesList this.props = ' + JSON.stringify(this.props));
-    console.log('NamesList this.props.flatList = ' + this.props.flatList);
+    console.log('NamesList.render. data = ' + this.props.data?.length);
     let rework = this.props.rework;
     let noalpha = this.props.noalpha;
     let data = this.props.data || ['No Names Found'];
     let sections = this.props.sections || null;
     let mapNameIndexToLetterIndex = this.props.mapNameIndexToLetterIndex || {};
-    console.log('NamesList this.props.showAlpha = ' + this.props.showAlpha);
     // titles is a list like ["A", "B", "D",...]
     let titles = Object.keys(data);
-    console.log('NamesList render Titles were: ' + JSON.stringify(titles));
     let headerHeight = this.state ? this.state.headerHeight : 0;
     if (this.props.rework) {
       return (
@@ -240,6 +237,18 @@ export default class NamesList extends React.Component {
         </React.Fragment>
       );
     }
+    if (this.props.flatList) {
+      console.log('Hello...');
+      return (
+        <React.Fragment>
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item.id}
+            renderItem={this.renderItem}></FlatList>
+        </React.Fragment>
+      );
+    }
+
     return (
       <React.Fragment>
         <SWAlphabetFlatList

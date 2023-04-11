@@ -24,12 +24,12 @@ const ListItemViewContent = styled.View`
   flex: auto;
 `;
 
-const ListItemButton = styled(Button).attrs(props => ({
+const ListItemButton = styled(Button).attrs((props) => ({
   containerStyle: {
     paddingTop: 0,
-    paddingBottom:  0,
-    width: '100%'
-  }
+    paddingBottom: 0,
+    width: '100%',
+  },
 }))``;
 
 const ListItemTitle = styled.Text`
@@ -40,7 +40,7 @@ const ListItemTitle = styled.Text`
 
 const ListItemHeader = styled.Text`
   color: blue;
-  opacity: ${props => (props.blocked || props.banned ? 1 : 0.7)};
+  opacity: ${(props) => (props.blocked || props.banned ? 1 : 0.7)};
   text-transform: uppercase;
   max-width: 90%;
   font-size: 20px;
@@ -60,30 +60,30 @@ const ListItemDetail = styled.Text`
  */
 const ListItemDescription = styled.Text`
   color: #ffffff;
-  opacity: ${props => (props.unread && !props.welcome ? 1 : 0.7)};
+  opacity: ${(props) => (props.unread && !props.welcome ? 1 : 0.7)};
   max-width: 90%;
   font-weight: 500;
   font-size: 30px;
-  ${props =>
+  ${(props) =>
     props.unread && !props.welcome && props.type === 'notification'
       ? 'font-family: gt-america-medium'
       : null}
 `;
 
-const ListItemSwipeableButton = styled(Button).attrs(props => ({
+const ListItemSwipeableButton = styled(Button).attrs((props) => ({
   containerStyle: {
     backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1
-  }
+    flex: 1,
+  },
 }))`
   color: green;
   text-align: center;
 `;
 
-const ListItemSwipeout = styled(View).attrs(props => ({
-  backgroundColor: 'transparent'
+const ListItemSwipeout = styled(View).attrs((props) => ({
+  backgroundColor: 'transparent',
 }))`
   border-width: 0px;
   width: 100%;
@@ -98,16 +98,15 @@ export class ListItem extends React.Component {
       blocked: props.blocked,
       banned: props.banned,
       unread: props.unread,
-      date: false
+      date: false,
     };
   }
 
   handleListItemPress = () => {
-	console.log("Do nothing on press");
+    console.log('Do nothing on press');
   };
 
-  handleSwipeablePress = action => {
-  };
+  handleSwipeablePress = (action) => {};
 
   // Displays the differnt types of swipeable options based on prop type
   displaySwipeableOptions() {
@@ -121,8 +120,8 @@ export class ListItem extends React.Component {
                   onPress={() => this.handleSwipeablePress('read')}>
                   Remove
                 </ListItemSwipeableButton>
-              )
-            }
+              ),
+            },
           ];
         case 'bailiff':
           return [
@@ -132,7 +131,7 @@ export class ListItem extends React.Component {
                   onPress={() => this.handleSwipeablePress('report')}>
                   Report
                 </ListItemSwipeableButton>
-              )
+              ),
             },
             {
               component: (
@@ -145,7 +144,7 @@ export class ListItem extends React.Component {
                   }}>
                   {!this.state.blocked ? 'Block' : 'Unblock'}
                 </ListItemSwipeableButton>
-              )
+              ),
             },
             {
               component: (
@@ -158,8 +157,8 @@ export class ListItem extends React.Component {
                   }}>
                   {!this.state.banned ? 'Ban' : 'Unban'}
                 </ListItemSwipeableButton>
-              )
-            }
+              ),
+            },
           ];
         default:
           return [
@@ -169,7 +168,7 @@ export class ListItem extends React.Component {
                   onPress={() => this.handleSwipeablePress('report')}>
                   Report
                 </ListItemSwipeableButton>
-              )
+              ),
             },
             {
               component: (
@@ -182,20 +181,20 @@ export class ListItem extends React.Component {
                   }}>
                   {!this.state.blocked ? 'Block' : 'Unblock'}
                 </ListItemSwipeableButton>
-              )
-            }
+              ),
+            },
           ];
       }
     }
   }
 
-  _handleSwipeOpen(){
+  _handleSwipeOpen() {
     this.setState({ closeSwipe: false });
     //console.log('_handleSwipeOpen');
   }
 
   render() {
-    console.log("WHat are the props eh? " + JSON.stringify(this.props));
+    console.log('ListItem.render');
     return (
       <ListItemView
         pointerEvents="box-none"
@@ -208,12 +207,11 @@ export class ListItem extends React.Component {
         <ListItemSwipeout
           disabled={this.props.disabled || !this.props.swipeable}
           type={this.props.swipeableType}
-          scroll={event => DeviceEventEmitter.emit('swipe-list', event)}
+          scroll={(event) => DeviceEventEmitter.emit('swipe-list', event)}
           buttonWidth={this.props.swipeableType === 'notification' ? 130 : 90}
           autoClose={true}
-          onOpen={() => (this._handleSwipeOpen())}
-          close={this.state.closeSwipe}
-          >
+          onOpen={() => this._handleSwipeOpen()}
+          close={this.state.closeSwipe}>
           <ListItemButton
             title={this.props.name}
             {...this.props}
@@ -246,7 +244,11 @@ export class ListItem extends React.Component {
                 <ListItemTitle
                   type={this.props.swipeableType}
                   unread={this.state.unread}
-                  numberOfLines={ this.props.titleNumberOfLines ? this.props.titleNumberOfLines : 2 }
+                  numberOfLines={
+                    this.props.titleNumberOfLines
+                      ? this.props.titleNumberOfLines
+                      : 2
+                  }
                   small={
                     (this.props.button &&
                       (this.props.icon || this.props.polygon) &&
@@ -275,7 +277,5 @@ export class ListItem extends React.Component {
         </ListItemSwipeout>
       </ListItemView>
     );
-
   }
-
 }

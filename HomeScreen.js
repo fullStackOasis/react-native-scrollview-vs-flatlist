@@ -98,7 +98,6 @@ class HomeScreen extends Component {
   processData(nNames, content) {
     console.log('Going to process ' + nNames + ' names');
     let names = content.split('\n');
-    console.log(names[0]);
     let values = {};
     let counts = {};
     let mapNameIndexToLetterIndex = {};
@@ -141,7 +140,6 @@ class HomeScreen extends Component {
     });
     // This part is just trying to make each item a different height
     for (let i = 0; i < nNames; i++) {
-      console.log(i);
       let n = names[i];
       let splitarr = n.split(',');
       let letter = splitarr[0][0];
@@ -151,9 +149,7 @@ class HomeScreen extends Component {
       //	values[letter].push({ name : splitarr[0], description : splitarr[0], detail : "" + splitarr[1] });
       //}
       delete deletes[letter]; // save for delete later.
-      console.log(i + ' ' + JSON.stringify(splitarr[0]));
     }
-    console.log(JSON.stringify(deletes));
     // Sort within each letter of the alphabet.
     let sorter = function (a, b) {
       return a.name > b.name;
@@ -165,36 +161,28 @@ class HomeScreen extends Component {
       delete values[el];
     });
     let ourLetters = Object.keys(values);
-    console.log(ourLetters);
     let countLetters = 0;
     ourLetters.forEach(function (letter) {
       mapNameIndexToLetterIndex[countNames] = countLetters;
       countNames++;
       values[letter].forEach(function (v) {
-        id = counts[letter]++;
+        let id = counts[letter]++;
         mapNameIndexToLetterIndex[countNames] = countLetters;
         countNames++;
-        console.log(letter + ' countNames ' + countNames + ' ' + v);
         v.id = id;
       });
       mapNameIndexToLetterIndex[countNames] = countLetters;
       countNames++;
       countLetters++;
     });
-    //console.log(JSON.stringify(values));
-    console.log(
-      'mapNameIndexToLetterIndex ' + JSON.stringify(mapNameIndexToLetterIndex)
-    );
 
     // listValues is used for SectionList, https://reactnative.dev/docs/sectionlist
     // This is an attempt to make the app more efficient.
     let listValues = [];
     ourLetters.forEach(function (letter) {
       let obj = { title: letter, data: values[letter] };
-      console.log(obj);
       listValues.push(obj);
     });
-    console.log('listValues ' + JSON.stringify(listValues));
 
     /*
 		let trunc = {
@@ -202,8 +190,6 @@ class HomeScreen extends Component {
 			B: [{ id: 1, name : '2'}],
 			C: [{ id: 2, name : '3'}]
 		};*/
-    //this.setState({names});
-    console.log('Calling setState after readData ' + JSON.stringify(values));
     /* For example, values may be -
 			{"A":
 				[ {"name":"Ava","description":"Ava","detail":"F","id":0} ],
@@ -213,8 +199,6 @@ class HomeScreen extends Component {
 				[{"name":"Olivia","description":"Olivia","detail":"F","id":0}]
 			}
 		*/
-    //console.log("listValues");
-    //console.log(JSON.stringify(listValues));
     this.setState({
       names: values,
       countNames: countNames,
@@ -228,14 +212,7 @@ class HomeScreen extends Component {
      * User pushes the read data button.
      * The first name in the list is displayed.
      */
-    console.log('Going to render');
-    console.log(
-      'Going to render HOMESCREEN ' + JSON.stringify(this.state.names)
-    );
-    console.log(
-      'Going to render HOMESCREEN this.state.names.length ' +
-        JSON.stringify(this.state.countNames)
-    );
+    console.log('HomeScreen.render');
     //let text = "hello World";//(this.state.names && this.state.names.length) ? this.state.names[0] :'No names found';
     /*
 		let progressBar = null;
