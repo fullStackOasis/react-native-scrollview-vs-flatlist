@@ -11,7 +11,7 @@ const NAV_OFFSET = 0;
 const OFFSET = 0;
 const MAX = 40;
 const ContentView = styled.View`
-  height: ${props =>
+  height: ${(props) =>
     windowHeight -
     (props && props.size === 'small'
       ? SMALL_OFFSET
@@ -22,7 +22,7 @@ const ContentView = styled.View`
       : 0)}px;
   border-top-left-radius: ${0};
   border-top-right-radius: ${0};
-  top: ${props =>
+  top: ${(props) =>
     props && props.size === 'small'
       ? SMALL_OFFSET + 'px'
       : props.size === 'large'
@@ -31,7 +31,7 @@ const ContentView = styled.View`
       ? NAV_OFFSET + 'px'
       : 'auto'};
   position: relative;
-  padding-bottom: ${props =>
+  padding-bottom: ${(props) =>
     props.size === 'small'
       ? SMALL_OFFSET
       : props.size === 'large'
@@ -45,99 +45,100 @@ const ContentView = styled.View`
 
 const MainScreenWrapper = styled.View`
   flex: 1;
-  backgroundColor: transparent;
+  backgroundcolor: transparent;
 `;
 
 class MainScreen extends Component {
+  /** Lifecycle methods */
+  constructor(props) {
+    super(props);
+    console.log('constructor MainScreen has props: ' + JSON.stringify(props));
+    this.state = {
+      names: {},
+      progress: false,
+    };
+    this.showProgressBar = this.showProgressBar.bind(this);
+    this.hideProgressBar = this.hideProgressBar.bind(this);
+    this.onLayout = this.onLayout.bind(this);
+  }
 
-	/** Lifecycle methods */
-	constructor(props) {
-		super(props);
-		console.log("constructor MainScreen has props: " + JSON.stringify(props));
-		this.state = {
-			names : {},
-			progress : false
-		};
-		this.showProgressBar = this.showProgressBar.bind(this);
-		this.hideProgressBar = this.hideProgressBar.bind(this);
-		this.onLayout = this.onLayout.bind(this);
-	}
+  /**
+   * Note: You cannot trust that componentDidMount will get called when
+   * screen is dismissed; react-navigation does not do that.
+   */
+  componentDidMount() {
+    this.hideProgressBar('MainScreen componentDidMount');
+  }
 
-	/**
-	 * Note: You cannot trust that componentDidMount will get called when
-	 * screen is dismissed; react-navigation does not do that.
-	 */
-	componentDidMount() {
-		this.hideProgressBar('MainScreen componentDidMount');
-	}
+  /** End Lifecycle methods */
 
-	/** End Lifecycle methods */
+  showProgressBar(msg) {
+    //return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+    console.log('MainScreen showProgressBar ' + msg);
+    this.setState({ progress: true });
+  }
 
-	showProgressBar(msg) {
-		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
-		console.log("MainScreen showProgressBar " + msg);
-		this.setState({progress : true});
-	}
+  hideProgressBar(msg) {
+    //return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
+    console.log('MainScreen hideProgressBar ' + msg);
+    this.setState({ progress: false });
+  }
 
-	hideProgressBar(msg) {
-		//return <ProgressBar progress={0.3} indeterminate={true} width={null} />;
-		console.log("MainScreen hideProgressBar " + msg);
-		this.setState({progress : false});
-	}
+  onLayout() {
+    this.hideProgressBar('MainScreen onLayout');
+  }
 
-	onLayout() {
-		this.hideProgressBar('MainScreen onLayout');
-	}
-
-	render() {
-		if (!this.props?.route?.params?.names) {
-			console.log("Returning null ..." + JSON.stringify(this.props));
-			return null;
-		}
-		console.log("NOT Returning null ..." + JSON.stringify(this.props.route.params));
-		let data = this.props.route.params.names;
-		let showAlpha = this.props.route.params.showAlpha;
-		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
-		let progressBar = null;
-		if (this.state.progress) {
-			progressBar = <TextWrapper>Laying out views</TextWrapper>;
-		} else {
-			progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
-		}
-		return (
-			<MainScreenWrapper  onLayout={this.onLayout}>
-				{/**
+  render() {
+    if (!this.props?.route?.params?.names) {
+      console.log('Returning null ...' + JSON.stringify(this.props));
+      return null;
+    }
+    console.log(
+      'NOT Returning null ...' + JSON.stringify(this.props.route.params)
+    );
+    let data = this.props.route.params.names;
+    let showAlpha = this.props.route.params.showAlpha;
+    let headerData = {
+      A: [{ id: 11, name: 'Aaliyah', description: 'Aaliyah' }],
+    };
+    let progressBar = null;
+    if (this.state.progress) {
+      progressBar = <TextWrapper>Laying out views</TextWrapper>;
+    } else {
+      progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
+    }
+    return (
+      <MainScreenWrapper onLayout={this.onLayout}>
+        {/**
 			<NavigationEvents
 			onDidFocus={() => {} } // noop
 			onWillFocus={() => { this.showProgressBar('willFocus'); } }
 			onWillBlur={() => { this.hideProgressBar('willBlur'); } }
 			onDidBlur={() => { this.hideProgressBar('didBlur'); } }
 			/> */}
-			{progressBar}
-			<ContentView
-			  size="small"
-			  tabs={true}
-			  isPadding={true}
-			  onLayout={event => { 
-				  console.log("laid out " +this.height);
-				  this.height = event.nativeEvent.layout.height;
-				}}>
-			<NamesList
-				key="namesList"
-				/*ref={ref => (this.contactList = ref)}*/
-				data={data}
-				showAlpha={Boolean(showAlpha)}
-				headerData={headerData}
-				insetPadding={true}
-				onSwipeablePress={this._handleSwipeableButton}
-				containerHeight={this.height || windowHeight}
-			>
-			</NamesList>
-			</ContentView>
-			<FooterComponent/>
-			</MainScreenWrapper>
-		)
-	}
+        {progressBar}
+        <ContentView
+          size="small"
+          tabs={true}
+          isPadding={true}
+          onLayout={(event) => {
+            console.log('laid out ' + this.height);
+            this.height = event.nativeEvent.layout.height;
+          }}>
+          <NamesList
+            key="namesList"
+            /*ref={ref => (this.contactList = ref)}*/
+            data={data}
+            showAlpha={Boolean(showAlpha)}
+            headerData={headerData}
+            insetPadding={true}
+            onSwipeablePress={this._handleSwipeableButton}
+            containerHeight={this.height || windowHeight}></NamesList>
+        </ContentView>
+        <FooterComponent />
+      </MainScreenWrapper>
+    );
+  }
 }
 
 export default MainScreen;
