@@ -92,7 +92,7 @@ class MainScreen extends Component {
       return null;
     }
     let data = this.props.route.params.names;
-    console.log('MainScreen.render. data.length = ' + data?.length);
+    console.log('MainScreen.render. data.length = ' + JSON.stringify(data));
     let showAlpha = this.props.route.params.showAlpha;
     let headerData = {
       A: [{ id: 11, name: 'Aaliyah', description: 'Aaliyah' }],
@@ -114,7 +114,7 @@ class MainScreen extends Component {
 			/> */}
         {progressBar}
         <ContentView
-          size="small"
+          size='small'
           tabs={true}
           isPadding={true}
           onLayout={(event) => {
@@ -122,7 +122,7 @@ class MainScreen extends Component {
             this.height = event.nativeEvent.layout.height;
           }}>
           <NamesList
-            key="namesList"
+            key='namesList'
             /*ref={ref => (this.contactList = ref)}*/
             data={data}
             showAlpha={Boolean(showAlpha)}
