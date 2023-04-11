@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, DeviceEventEmitter } from 'react-native';
-import Button from 'react-native-button';
+import { View, DeviceEventEmitter, Button } from 'react-native';
+// import Button from 'react-native-button';
 import styled from 'styled-components/native';
 
 const ListItemView = styled.View`
@@ -195,6 +195,7 @@ export class ListItem extends React.Component {
   }
 
   render() {
+    console.log("WHat are the props eh? " + JSON.stringify(this.props));
     return (
       <ListItemView
         pointerEvents="box-none"
@@ -214,6 +215,7 @@ export class ListItem extends React.Component {
           close={this.state.closeSwipe}
           >
           <ListItemButton
+            title={this.props.name}
             {...this.props}
             disabled={
               this.props.disabled ||

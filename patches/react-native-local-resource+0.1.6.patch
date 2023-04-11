@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-local-resource/android/build.gradle b/node_modules/react-native-local-resource/android/build.gradle
+index ae0b6dc..24520a2 100644
+--- a/node_modules/react-native-local-resource/android/build.gradle
++++ b/node_modules/react-native-local-resource/android/build.gradle
+@@ -36,6 +36,6 @@ repositories {
+ }
+ 
+ dependencies {
+-    provided 'com.facebook.react:react-native:+'
+-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
++    compileOnly 'com.facebook.react:react-native:+'
++    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+ }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
-import {NavigationEvents} from 'react-navigation';
 import FooterComponent from './FooterComponent';
 import TextWrapper from './TextWrapper';
 const windowWidth = Dimensions.get('window').width;
@@ -54,6 +53,7 @@ class MainScreen extends Component {
 	/** Lifecycle methods */
 	constructor(props) {
 		super(props);
+		console.log("constructor MainScreen has props: " + JSON.stringify(props));
 		this.state = {
 			names : {},
 			progress : false
@@ -90,9 +90,13 @@ class MainScreen extends Component {
 	}
 
 	render() {
-		const { navigation } = this.props;
-		let data = navigation.getParam('names');
-		let showAlpha = navigation.getParam('showAlpha');
+		if (!this.props?.route?.params?.names) {
+			console.log("Returning null ..." + JSON.stringify(this.props));
+			return null;
+		}
+		console.log("NOT Returning null ..." + JSON.stringify(this.props.route.params));
+		let data = this.props.route.params.names;
+		let showAlpha = this.props.route.params.showAlpha;
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		let progressBar = null;
 		if (this.state.progress) {
@@ -102,12 +106,13 @@ class MainScreen extends Component {
 		}
 		return (
 			<MainScreenWrapper  onLayout={this.onLayout}>
+				{/**
 			<NavigationEvents
 			onDidFocus={() => {} } // noop
 			onWillFocus={() => { this.showProgressBar('willFocus'); } }
 			onWillBlur={() => { this.hideProgressBar('willBlur'); } }
 			onDidBlur={() => { this.hideProgressBar('didBlur'); } }
-			/>
+			/> */}
 			{progressBar}
 			<ContentView
 			  size="small"

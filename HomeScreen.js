@@ -9,7 +9,6 @@ import styled from 'styled-components/native';
 import myResource from './assets/yob2019.txt';
 import PButton from './PButton';
 //import ProgressBar from 'react-native-progress/Bar';
-import {NavigationEvents} from 'react-navigation';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -207,7 +206,6 @@ class HomeScreen extends Component {
 		return (
 			<HomeScreenWrapper>
 				
-			<NavigationEvents onDidFocus={() => console.log('I am triggered')} />				
 			<View style={styles.title}>
 				<Text style={styles.title}>There {this.state.countNames == 1 ? 'is' : 'are'} {this.state.countNames} name{this.state.countNames == 1 ? '' : 's'} in the list</Text>
 			</View>

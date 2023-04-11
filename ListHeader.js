@@ -1,6 +1,6 @@
 import React from 'react';
+import { Button } from 'react-native';
 import styled from 'styled-components/native';
-import Button from 'react-native-button';
 
 const ListHeaderView = styled.View`
   background-color: ${props =>

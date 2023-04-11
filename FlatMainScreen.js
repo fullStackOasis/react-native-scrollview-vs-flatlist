@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
-import {NavigationEvents} from 'react-navigation';
+//import {NavigationEvents} from 'react-navigation';
 import FooterComponent from './FooterComponent';
 import TextWrapper from './TextWrapper';
 const windowWidth = Dimensions.get('window').width;
@@ -90,11 +90,15 @@ class FlatMainScreen extends Component {
 	}
 
 	render() {
-		const { navigation } = this.props;
-		let data = navigation.getParam('names');
-		let listData = navigation.getParam('listNames');
-		let rework = navigation.getParam('rework');
-		let mapNameIndexToLetterIndex = navigation.getParam('mapNameIndexToLetterIndex');
+		if (!this.props?.route?.params?.names) {
+			console.log("Returning null ..." + JSON.stringify(this.props));
+			return null;
+		}
+		let data = this.props.route.params.names;
+		let showAlpha = this.props.route.params.showAlpha;
+		let listData = this.props.route.params.listNames;
+		let rework = this.props.route.params.rework;
+		let mapNameIndexToLetterIndex = this.props.route.params.mapNameIndexToLetterIndex;
 		console.log("FFFF sending listData as sections = " + JSON.stringify(listData));
 		let headerData = {"A":[{"id":11,"name":"Aaliyah","description":"Aaliyah"}]};
 		/*let progressBar = null;
@@ -110,12 +114,13 @@ class FlatMainScreen extends Component {
 		//progressBar = null;
 		return (
 			<FlatMainScreenWrapper onLayout={this.onLayout}>
+				{/* 
 			<NavigationEvents
 			onDidFocus={() => {} } // noop
 			onWillFocus={() => { this.showProgressBar('willFocus'); } }
 			onWillBlur={() => { this.hideProgressBar('willBlur'); } }
 			onDidBlur={() => { this.hideProgressBar('didBlur'); } }
-			/>
+			/>*/}
 			{progressBar}
 			<ContentView
 			  size="small"

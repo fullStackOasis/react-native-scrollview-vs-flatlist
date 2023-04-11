@@ -1,23 +1,34 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import MainScreen from './MainScreen';
-import FlatMainScreen from './FlatMainScreen';
-import HomeScreen from './HomeScreen';
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-//if (!__DEV__ || __DEV__) {
+import MainScreen from './MainScreen';
+import HomeScreen from './HomeScreen';
+import FlatMainScreen from './FlatMainScreen';
+
 if (!__DEV__) {
 	console = {};
 	console.log = () => {};
 	console.error = () => {};
 	console.assert = () => {};
 }
-const MainNavigator = createStackNavigator(
-	{ Home: HomeScreen,
-	Main: MainScreen,
-	FlatMain : FlatMainScreen },
-	{ initialRouteName: 'Home' }
-);
 
-const App = createAppContainer(MainNavigator);
+const Stack = createNativeStackNavigator();
+//const Stack = createStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Main" component={MainScreen} />
+		<Stack.Screen name="FlatMain" component={FlatMainScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
