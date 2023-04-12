@@ -42,3 +42,17 @@ Source code suggests that `index` in `getItemLayout` has an extra increment, one
 https://github.com/facebook/react-native/blob/master/Libraries/Lists/VirtualizedSectionList.js#L132
 
 https://reactnative.dev/docs/sectionlist
+
+# FlatList
+
+Apr 11 2023 A FlatList has been added to the demo.
+
+The uppermost button has been set to give you the choice to add 2000 items to the FlatList. Once you do this, you will find a warning in Metro server logs:
+
+```
+VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 20555.427734375, "dt": 519, "prevDt": 527}
+```
+
+Initially, I tried this with "inverted" set to true on the FlatList, because I'd heard reports that Android was especially slow handling inverted FlatLists. However, it turns out that the app showed performance issues even without inverted set.
+
+As you scroll, you'll find the app slows down. "Pulling" down with your finger loads fewer results and the scrolling slows down quite a bit. At some point you start to see white flashing chunks in the list.

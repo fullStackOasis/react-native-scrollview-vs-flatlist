@@ -199,7 +199,6 @@ export default class NamesList extends React.Component {
         key={index}
         selected={item.selected}
         style={{
-          height: ITEM_HEIGHT,
           color: 'white',
           backgroundColor: 'navy',
         }}>
@@ -230,6 +229,7 @@ export default class NamesList extends React.Component {
     let titles = Object.keys(data);
     let headerHeight = this.state ? this.state.headerHeight : 0;
     if (this.props.rework) {
+      console.log('NamesList.render rework');
       return (
         <React.Fragment>
           <SWAlphabetFlatListRework
@@ -264,19 +264,21 @@ export default class NamesList extends React.Component {
       );
     }
     if (this.props.flatList) {
+      console.log('NamesList.render flatList');
       const processedData = getFlatListData(data);
       console.log('NamesList finished processing input data');
-      // data is not properly formatted for display in a FlatList.
+      // data was not properly formatted for display in a FlatList.
       return (
         <React.Fragment>
           <FlatList
+            inverted={this.props.inverted}
             data={processedData}
             keyExtractor={(item) => item.id}
             renderItem={this.renderItem}></FlatList>
         </React.Fragment>
       );
     }
-
+    console.log('NamesList.render default');
     return (
       <React.Fragment>
         <SWAlphabetFlatList

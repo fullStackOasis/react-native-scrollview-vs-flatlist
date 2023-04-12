@@ -15,8 +15,8 @@ const windowHeight = Dimensions.get('window').height;
 const SMALL_OFFSET = windowHeight * 0.013;
 const NAV_OFFSET = 0;
 const OFFSET = 0;
-const MAX = 1000;
-const CHOICE1 = 100;
+const MAX = 2000;
+const CHOICE1 = MAX;
 //const CHOICE1 = 60;
 const ContentView = styled.View`
   height: ${(props) =>
@@ -297,7 +297,7 @@ class HomeScreen extends Component {
           }
         />
         <PButton
-          title={'Main Screen FlatList'}
+          title={'Main Screen INVERTED FlatList'}
           color='orange'
           onPress={() =>
             this.props.navigation.navigate('Main', {
@@ -306,6 +306,7 @@ class HomeScreen extends Component {
               rework: true,
               showAlpha: false,
               flatList: true,
+              inverted: false,
             })
           }
         />
