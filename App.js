@@ -10,10 +10,10 @@ import HomeScreen from './HomeScreen';
 import FlatMainScreen from './FlatMainScreen';
 
 if (!__DEV__) {
-	console = {};
-	console.log = () => {};
-	console.error = () => {};
-	console.assert = () => {};
+  console = {};
+  console.log = () => {};
+  console.error = () => {};
+  console.assert = () => {};
 }
 
 const Stack = createNativeStackNavigator();
@@ -25,7 +25,7 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Main" component={MainScreen} />
-		<Stack.Screen name="FlatMain" component={FlatMainScreen} />
+        <Stack.Screen name="FlatMain" component={FlatMainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

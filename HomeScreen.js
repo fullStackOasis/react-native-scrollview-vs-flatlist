@@ -233,14 +233,14 @@ class HomeScreen extends Component {
 
         <PButton
           title={'Read ' + CHOICE1 + ' Names in-app'}
-          color='darkgreen'
+          color='#123456'
           onPress={() => {
             this.readData(CHOICE1);
           }}
         />
         <PButton
           title={'Fetch 100 Names From Server'}
-          color='mediumseagreen'
+          color='#123478'
           backgroundcolor='black'
           onPress={() => {
             this.fetchNames(250);
@@ -248,21 +248,21 @@ class HomeScreen extends Component {
         />
         <PButton
           title={'Read 250 Names in-app'}
-          color='darkgoldenrod'
+          color='#12349A'
           onPress={() => {
             this.readData(250);
           }}
         />
         <PButton
           title={'Fetch 250 Names From Server'}
-          color='chocolate'
+          color='#1234AB'
           onPress={() => {
             this.fetchNames(250);
           }}
         />
         <PButton
           title={'Main Screen'}
-          color='red'
+          color='#1234BC'
           onPress={() =>
             this.props.navigation.navigate('Main', {
               names: this.state.names,
@@ -274,7 +274,7 @@ class HomeScreen extends Component {
         />
         <PButton
           title={'Flat Main Screen'}
-          color='blueviolet'
+          color='#1234CD'
           onPress={() =>
             this.props.navigation.navigate('FlatMain', {
               names: this.state.names,
@@ -286,7 +286,7 @@ class HomeScreen extends Component {
         />
         <PButton
           title={'Main Screen No Alpha'}
-          color='darkblue'
+          color='#1234DE'
           onPress={() =>
             this.props.navigation.navigate('Main', {
               names: this.state.names,
@@ -298,7 +298,7 @@ class HomeScreen extends Component {
         />
         <PButton
           title={'Main Screen INVERTED FlatList'}
-          color='orange'
+          color='#1234EF'
           onPress={() =>
             this.props.navigation.navigate('Main', {
               names: this.state.names,
@@ -306,7 +306,7 @@ class HomeScreen extends Component {
               rework: true,
               showAlpha: false,
               flatList: true,
-              inverted: false,
+              inverted: true,
             })
           }
         />
