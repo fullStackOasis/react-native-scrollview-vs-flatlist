@@ -44,7 +44,6 @@ const Image = ({ uri, style }) => {
 
   if (imageUri) {
     // Other uri for testing: https://unsplash.it/400/400?image=1
-    console.log('URI: ' + uri);
     return (
       <LazyImageElement
         style={style}
