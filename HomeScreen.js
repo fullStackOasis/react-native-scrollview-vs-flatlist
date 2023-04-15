@@ -18,91 +18,93 @@ const OFFSET = 0;
 const MAX = 2000;
 const CHOICE1 = MAX;
 
-const smallNumber = 100;
-const buttons = [
-  {
-    title: 'Read ' + CHOICE1 + ' Names in-app',
-    onPress: () => {
-      this.readData(CHOICE1);
+const smallNumber = 200;
+const getButtons = (me) => {
+  const buttons = [
+    {
+      title: 'Read ' + CHOICE1 + ' Names in-app',
+      onPress: () => {
+        me.readData(CHOICE1);
+      },
     },
-  },
-  {
-    title: `Fetch ${smallNumber} Names From Server`,
-    onPress: () => {
-      this.fetchNames(smallNumber);
+    {
+      title: `Fetch ${smallNumber} Names From Server`,
+      onPress: () => {
+        me.fetchNames(smallNumber);
+      },
     },
-  },
-  {
-    title: `Read ${smallNumber} Names in-app`,
-    onPress: () => {
-      this.fetchNames(250);
+    {
+      title: `Read ${smallNumber} Names in-app`,
+      onPress: () => {
+        me.fetchNames(250);
+      },
     },
-  },
-  {
-    title: 'Main Screen',
-    onPress: () => {
-      this.props.navigation.navigate('Main', {
-        names: this.state.names,
-        listNames: this.state.listNames,
-        rework: false,
-        showAlpha: true,
-      });
+    {
+      title: 'Main Screen',
+      onPress: () => {
+        me.props.navigation.navigate('Main', {
+          names: me.state.names,
+          listNames: me.state.listNames,
+          rework: false,
+          showAlpha: true,
+        });
+      },
     },
-  },
-  {
-    title: 'Flat Main Screen',
-    onPress: () => {
-      this.props.navigation.navigate('FlatMain', {
-        names: this.state.names,
-        listNames: this.state.listNames,
-        rework: true,
-        mapNameIndexToLetterIndex: this.state.mapNameIndexToLetterIndex,
-      });
+    {
+      title: 'Flat Main Screen',
+      onPress: () => {
+        me.props.navigation.navigate('FlatMain', {
+          names: me.state.names,
+          listNames: me.state.listNames,
+          rework: true,
+          mapNameIndexToLetterIndex: me.state.mapNameIndexToLetterIndex,
+        });
+      },
     },
-  },
-  {
-    title: 'Main Screen No Alpha',
-    onPress: () => {
-      this.props.navigation.navigate('Main', {
-        names: this.state.names,
-        listNames: this.state.listNames,
-        rework: true,
-        showAlpha: false,
-        flatList: true,
-        inverted: true,
-      });
+    {
+      title: 'Main Screen No Alpha',
+      onPress: () => {
+        me.props.navigation.navigate('Main', {
+          names: me.state.names,
+          listNames: me.state.listNames,
+          rework: true,
+          showAlpha: false,
+          flatList: true,
+          inverted: true,
+        });
+      },
     },
-  },
-  {
-    title: 'Main Screen INVERTED FlatList',
-    onPress: () => {
-      this.props.navigation.navigate('Main', {
-        names: this.state.names,
-        listNames: this.state.listNames,
-        rework: true,
-        showAlpha: false,
-        flatList: true,
-        inverted: true,
-      });
+    {
+      title: 'Main Screen INVERTED FlatList',
+      onPress: () => {
+        me.props.navigation.navigate('Main', {
+          names: me.state.names,
+          listNames: me.state.listNames,
+          rework: true,
+          showAlpha: false,
+          flatList: true,
+          inverted: true,
+        });
+      },
     },
-  },
-  {
-    title: 'Main Screen INVERTED FlatList load more',
-    onPress: () => {
-      this.props.navigation.navigate('Main', {
-        names: this.state.names,
-        listNames: this.state.listNames,
-        rework: true,
-        showAlpha: false,
-        flatList: true,
-        inverted: true,
-        scrollHandler: () => {
-          console.log('you have been scrolled');
-        },
-      });
+    {
+      // test loading more data into flatlist via scrolling
+      title: 'Main Screen INVERTED FlatList loader',
+      onPress: () => {
+        me.props.navigation.navigate('Main', {
+          names: me.state.names,
+          listNames: me.state.listNames,
+          rework: true,
+          showAlpha: false,
+          flatList: true,
+          inverted: true,
+          loader: true,
+        });
+      },
     },
-  },
-];
+  ];
+  return buttons;
+};
 
 //const CHOICE1 = 60;
 const ContentView = styled.View`
@@ -329,6 +331,7 @@ class HomeScreen extends Component {
 
 		}*/
     // Place titles, color, and onPress into array.
+    const buttons = getButtons(this);
     const nButtons = buttons.length;
     console.log(nButtons);
     const buttonList = buttons.map((button, i) => {
@@ -340,6 +343,7 @@ class HomeScreen extends Component {
           title={obj.title}
           color={color}
           onPress={obj.onPress}
+          scrollHandler={obj.scrollHandler}
         />
       );
     });

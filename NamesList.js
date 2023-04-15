@@ -48,6 +48,10 @@ export default class NamesList extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log('XXXX ' + this.props.onScrollHandler);
+    console.log('XXXX ' + this.props.headerData);
+    console.log('XXXX ' + this.props.onSwipeablePress);
+
     this.state = {
       items: {},
       searching: false,
@@ -59,6 +63,7 @@ export default class NamesList extends React.Component {
     console.log('NamesList constructor ' + JSON.stringify(this.state.header));
     this.renderHeader = this.renderHeader.bind(this);
     this.onHeaderLayout = this.onHeaderLayout.bind(this);
+    this.onScrollHandler = this.props.onScrollHandler.bind(this);
   }
 
   componentDidMount() {
@@ -188,7 +193,7 @@ export default class NamesList extends React.Component {
    */
   renderItem({ item, index, sectionId }) {
     // Use for debugging.
-    console.log('NamesList renderItem ' + JSON.stringify(item));
+    //console.log('NamesList renderItem ' + JSON.stringify(item));
     /*return <ListItem
 	{...item}
 	key={index}
@@ -238,6 +243,7 @@ export default class NamesList extends React.Component {
 
   render() {
     console.log('NamesList.render. data = ' + this.props.data?.length);
+    console.log('NamesList.render. props = ' + JSON.stringify(this.props));
     let rework = this.props.rework;
     let noalpha = this.props.noalpha;
     let data = this.props.data || ['No Names Found'];
@@ -281,6 +287,24 @@ export default class NamesList extends React.Component {
         </React.Fragment>
       );
     }
+    if (this.props.loader) {
+      console.log('NamesList.render flatList with loader');
+      const processedData = getFlatListData(data);
+      console.log('NamesList finished processing input data');
+      // data was not properly formatted for display in a FlatList.
+      return (
+        <React.Fragment>
+          <FlatList
+            inverted={this.props.inverted}
+            data={processedData}
+            keyExtractor={(item) => item.id}
+            renderItem={this.renderItem}
+            onScroll={() => {
+              this.props.onScrollHandler();
+            }}></FlatList>
+        </React.Fragment>
+      );
+    }
     if (this.props.flatList) {
       console.log('NamesList.render flatList');
       const processedData = getFlatListData(data);
@@ -292,7 +316,8 @@ export default class NamesList extends React.Component {
             inverted={this.props.inverted}
             data={processedData}
             keyExtractor={(item) => item.id}
-            renderItem={this.renderItem}></FlatList>
+            renderItem={this.renderItem}
+            onScroll={this.onScrollHandler}></FlatList>
         </React.Fragment>
       );
     }

@@ -59,6 +59,7 @@ class MainScreen extends Component {
     this.showProgressBar = this.showProgressBar.bind(this);
     this.hideProgressBar = this.hideProgressBar.bind(this);
     this.onLayout = this.onLayout.bind(this);
+    this.onScrollHandler = this.onScrollHandler.bind(this);
   }
 
   /**
@@ -85,6 +86,10 @@ class MainScreen extends Component {
 
   onLayout() {
     this.hideProgressBar('MainScreen onLayout');
+  }
+
+  onScrollHandler() {
+    console.log('MainScreen onScrollHandler');
   }
 
   render() {
@@ -114,22 +119,25 @@ class MainScreen extends Component {
 			/> */}
         {progressBar}
         <ContentView
-          size="small"
+          size='small'
           tabs={true}
           isPadding={true}
           onLayout={(event) => {
-            console.log('laid out ' + this.height);
             this.height = event.nativeEvent.layout.height;
           }}>
           <NamesList
-            key="namesList"
+            key='namesList'
             /*ref={ref => (this.contactList = ref)}*/
             data={data}
             showAlpha={Boolean(showAlpha)}
             inverted={Boolean(this.props.route.params.inverted)}
             flatList={Boolean(this.props.route.params.flatList)}
+            loader={Boolean(this.props.route.params.loader)}
             headerData={headerData}
             insetPadding={true}
+            onScrollHandler={
+              this.props.route.params.loader ? this.onScrollHandler : () => {}
+            }
             onSwipeablePress={this._handleSwipeableButton}
             containerHeight={this.height || windowHeight}></NamesList>
         </ContentView>
