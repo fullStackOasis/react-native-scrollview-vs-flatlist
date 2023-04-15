@@ -8,6 +8,7 @@ import { ListFilterItem } from './ListFilterItem';
 import SWAlphabetFlatList from './SWAlphabetFlatList';
 import SWAlphabetFlatListRework from './SWAlphabetFlatListRework';
 const ITEM_HEIGHT = 70;
+import AvatarImage from './AvatarImage';
 
 /**
  * Takes input data used by SectionList and returns array of data for use by FlatList.
@@ -187,7 +188,7 @@ export default class NamesList extends React.Component {
    */
   renderItem({ item, index, sectionId }) {
     // Use for debugging.
-    // console.log('NamesList renderItem ' + JSON.stringify(item));
+    console.log('NamesList renderItem ' + JSON.stringify(item));
     /*return <ListItem
 	{...item}
 	key={index}
@@ -195,15 +196,32 @@ export default class NamesList extends React.Component {
 	style={{ height : ITEM_HEIGHT, color: 'white', backgroundColor : 'navy'}}
 	/>*/
     return (
-      <Text
-        key={index}
-        selected={item.selected}
+      <View
         style={{
-          color: 'white',
+          marginHorizontal: 4,
+          flex: 1,
           backgroundColor: 'navy',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
         }}>
-        {item.name}
-      </Text>
+        {/*
+        http://loremflickr.com/g/50/50/paris
+         */}
+        <Text
+          key={index}
+          selected={item.selected}
+          style={{
+            margin: 1,
+            textAlign: 'center',
+            color: 'white',
+            backgroundColor: 'navy',
+          }}>
+          <AvatarImage
+            style={{ width: 50, height: 50, borderRadius: 10, margin: 10 }}
+            uri={'http://loremflickr.com/g/50/50/paris'}></AvatarImage>
+          {item.name}
+        </Text>
+      </View>
     );
   }
 
