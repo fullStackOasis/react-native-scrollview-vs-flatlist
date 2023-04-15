@@ -52,14 +52,19 @@ class MainScreen extends Component {
   /** Lifecycle methods */
   constructor(props) {
     super(props);
+    // props is expected to have data set in it.
     this.state = {
       names: {},
       progress: false,
+      page: 0,
     };
     this.showProgressBar = this.showProgressBar.bind(this);
     this.hideProgressBar = this.hideProgressBar.bind(this);
     this.onLayout = this.onLayout.bind(this);
     this.onScrollHandler = this.onScrollHandler.bind(this);
+    console.log(
+      'MainScreen constructor has props.data.length: ' + props.data?.length
+    );
   }
 
   /**
@@ -89,7 +94,9 @@ class MainScreen extends Component {
   }
 
   onScrollHandler() {
-    console.log('MainScreen onScrollHandler');
+    const newPage = this.state.page + 1;
+    this.setState({ page: newPage });
+    console.log('MainScreen onScrollHandler page is ' + newPage);
   }
 
   render() {
@@ -108,6 +115,7 @@ class MainScreen extends Component {
     } else {
       progressBar = <TextWrapper>Finished laying out views</TextWrapper>;
     }
+    console.log('MainScreen rendering. page is ' + this.state.page);
     return (
       <MainScreenWrapper onLayout={this.onLayout}>
         {/**
@@ -119,14 +127,14 @@ class MainScreen extends Component {
 			/> */}
         {progressBar}
         <ContentView
-          size='small'
+          size="small"
           tabs={true}
           isPadding={true}
           onLayout={(event) => {
             this.height = event.nativeEvent.layout.height;
           }}>
           <NamesList
-            key='namesList'
+            key="namesList"
             /*ref={ref => (this.contactList = ref)}*/
             data={data}
             showAlpha={Boolean(showAlpha)}
@@ -135,6 +143,7 @@ class MainScreen extends Component {
             loader={Boolean(this.props.route.params.loader)}
             headerData={headerData}
             insetPadding={true}
+            page={this.state.page}
             onScrollHandler={
               this.props.route.params.loader ? this.onScrollHandler : () => {}
             }

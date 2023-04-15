@@ -47,10 +47,16 @@ export default class NamesList extends React.Component {
   eventListener;
 
   constructor(props) {
+    // props is expected to have page, the number of pages of data, in case where loader is true
     super(props);
-    console.log('XXXX ' + this.props.onScrollHandler);
-    console.log('XXXX ' + this.props.headerData);
-    console.log('XXXX ' + this.props.onSwipeablePress);
+    console.log(
+      'XXXX this.props.onScrollHandler ' + this.props.onScrollHandler
+    );
+    console.log('XXXX headerData ' + this.props.headerData);
+    console.log(
+      'XXXX this.props.onSwipeablePress ' + this.props.onSwipeablePress
+    );
+    console.log('XXXX this.props.page ' + this.props.page);
 
     this.state = {
       items: {},
@@ -59,6 +65,7 @@ export default class NamesList extends React.Component {
       selected: [],
       scrollEnabled: false,
       headerHeight: 0,
+      nItems: 0,
     };
     console.log('NamesList constructor ' + JSON.stringify(this.state.header));
     this.renderHeader = this.renderHeader.bind(this);
@@ -243,7 +250,6 @@ export default class NamesList extends React.Component {
 
   render() {
     console.log('NamesList.render. data = ' + this.props.data?.length);
-    console.log('NamesList.render. props = ' + JSON.stringify(this.props));
     let rework = this.props.rework;
     let noalpha = this.props.noalpha;
     let data = this.props.data || ['No Names Found'];
@@ -287,20 +293,42 @@ export default class NamesList extends React.Component {
         </React.Fragment>
       );
     }
+    // This case mimics a data source that starts with some limited, small
+    // amount, and keeps growing as the user scrolls.
     if (this.props.loader) {
-      console.log('NamesList.render flatList with loader');
       const processedData = getFlatListData(data);
-      console.log('NamesList finished processing input data');
+      const initNum = 30;
+      const n =
+        !this.props.page || this.props.page < 2
+          ? initNum
+          : this.props.page * 2 * 30;
+      console.log(
+        'NamesList.render flatList with loader, page is ' +
+          this.state.page +
+          ' processedData lebgth is ' +
+          processedData.length +
+          ' n is ' +
+          n
+      );
+      const pagedData = processedData.splice(0, n);
+      console.log('NamesList finished processing input data, n = ' + n);
       // data was not properly formatted for display in a FlatList.
       return (
         <React.Fragment>
           <FlatList
+            initialNumToRender={initNum - 1}
+            onEndReachedThreshold={0.99}
+            onEndReached={() => {
+              console.log('onEndReached');
+              this.props.onScrollHandler();
+            }}
             inverted={this.props.inverted}
-            data={processedData}
+            data={pagedData}
             keyExtractor={(item) => item.id}
+            page={this.props.page}
             renderItem={this.renderItem}
             onScroll={() => {
-              this.props.onScrollHandler();
+              //
             }}></FlatList>
         </React.Fragment>
       );
