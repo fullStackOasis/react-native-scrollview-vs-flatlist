@@ -17,6 +17,93 @@ const NAV_OFFSET = 0;
 const OFFSET = 0;
 const MAX = 2000;
 const CHOICE1 = MAX;
+
+const smallNumber = 100;
+const buttons = [
+  {
+    title: 'Read ' + CHOICE1 + ' Names in-app',
+    onPress: () => {
+      this.readData(CHOICE1);
+    },
+  },
+  {
+    title: `Fetch ${smallNumber} Names From Server`,
+    onPress: () => {
+      this.fetchNames(smallNumber);
+    },
+  },
+  {
+    title: `Read ${smallNumber} Names in-app`,
+    onPress: () => {
+      this.fetchNames(250);
+    },
+  },
+  {
+    title: 'Main Screen',
+    onPress: () => {
+      this.props.navigation.navigate('Main', {
+        names: this.state.names,
+        listNames: this.state.listNames,
+        rework: false,
+        showAlpha: true,
+      });
+    },
+  },
+  {
+    title: 'Flat Main Screen',
+    onPress: () => {
+      this.props.navigation.navigate('FlatMain', {
+        names: this.state.names,
+        listNames: this.state.listNames,
+        rework: true,
+        mapNameIndexToLetterIndex: this.state.mapNameIndexToLetterIndex,
+      });
+    },
+  },
+  {
+    title: 'Main Screen No Alpha',
+    onPress: () => {
+      this.props.navigation.navigate('Main', {
+        names: this.state.names,
+        listNames: this.state.listNames,
+        rework: true,
+        showAlpha: false,
+        flatList: true,
+        inverted: true,
+      });
+    },
+  },
+  {
+    title: 'Main Screen INVERTED FlatList',
+    onPress: () => {
+      this.props.navigation.navigate('Main', {
+        names: this.state.names,
+        listNames: this.state.listNames,
+        rework: true,
+        showAlpha: false,
+        flatList: true,
+        inverted: true,
+      });
+    },
+  },
+  {
+    title: 'Main Screen INVERTED FlatList load more',
+    onPress: () => {
+      this.props.navigation.navigate('Main', {
+        names: this.state.names,
+        listNames: this.state.listNames,
+        rework: true,
+        showAlpha: false,
+        flatList: true,
+        inverted: true,
+        scrollHandler: () => {
+          console.log('you have been scrolled');
+        },
+      });
+    },
+  },
+];
+
 //const CHOICE1 = 60;
 const ContentView = styled.View`
   height: ${(props) =>
@@ -55,6 +142,26 @@ const HomeScreenWrapper = styled.View`
   flex: 1;
   backgroundcolor: transparent;
 `;
+
+const componentToHex = (color) => {
+  var hex = color.toString(16);
+  return hex.length == 1 ? '0' + hex : hex;
+};
+
+const rgbToHex = (r, g, b) => {
+  return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+};
+
+const getColor = (decimalColor) => {
+  let rgb = [
+    (decimalColor & 0xff0000) >> 16,
+    (decimalColor & 0x00ff00) >> 8,
+    decimalColor & 0x0000ff,
+  ];
+  const result = rgbToHex(rgb[0], rgb[1], rgb[2]);
+  console.log(rgb);
+  return result;
+};
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -221,6 +328,21 @@ class HomeScreen extends Component {
 			{progressBar}
 
 		}*/
+    // Place titles, color, and onPress into array.
+    const nButtons = buttons.length;
+    console.log(nButtons);
+    const buttonList = buttons.map((button, i) => {
+      const color = getColor(nButtons * (i + 16));
+      const obj = button;
+      return (
+        <PButton
+          key={i}
+          title={obj.title}
+          color={color}
+          onPress={obj.onPress}
+        />
+      );
+    });
     return (
       <HomeScreenWrapper>
         <View style={styles.title}>
@@ -230,86 +352,7 @@ class HomeScreen extends Component {
             in the list
           </Text>
         </View>
-
-        <PButton
-          title={'Read ' + CHOICE1 + ' Names in-app'}
-          color='#123456'
-          onPress={() => {
-            this.readData(CHOICE1);
-          }}
-        />
-        <PButton
-          title={'Fetch 100 Names From Server'}
-          color='#123478'
-          backgroundcolor='black'
-          onPress={() => {
-            this.fetchNames(250);
-          }}
-        />
-        <PButton
-          title={'Read 250 Names in-app'}
-          color='#12349A'
-          onPress={() => {
-            this.readData(250);
-          }}
-        />
-        <PButton
-          title={'Fetch 250 Names From Server'}
-          color='#1234AB'
-          onPress={() => {
-            this.fetchNames(250);
-          }}
-        />
-        <PButton
-          title={'Main Screen'}
-          color='#1234BC'
-          onPress={() =>
-            this.props.navigation.navigate('Main', {
-              names: this.state.names,
-              listNames: this.state.listNames,
-              rework: false,
-              showAlpha: true,
-            })
-          }
-        />
-        <PButton
-          title={'Flat Main Screen'}
-          color='#1234CD'
-          onPress={() =>
-            this.props.navigation.navigate('FlatMain', {
-              names: this.state.names,
-              listNames: this.state.listNames,
-              rework: true,
-              mapNameIndexToLetterIndex: this.state.mapNameIndexToLetterIndex,
-            })
-          }
-        />
-        <PButton
-          title={'Main Screen No Alpha'}
-          color='#1234DE'
-          onPress={() =>
-            this.props.navigation.navigate('Main', {
-              names: this.state.names,
-              listNames: this.state.listNames,
-              rework: true,
-              showAlpha: false,
-            })
-          }
-        />
-        <PButton
-          title={'Main Screen INVERTED FlatList'}
-          color='#1234EF'
-          onPress={() =>
-            this.props.navigation.navigate('Main', {
-              names: this.state.names,
-              listNames: this.state.listNames,
-              rework: true,
-              showAlpha: false,
-              flatList: true,
-              inverted: true,
-            })
-          }
-        />
+        {buttonList}
       </HomeScreenWrapper>
     );
   }
