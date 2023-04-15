@@ -253,7 +253,11 @@ class HomeScreen extends Component {
       let splitarr = n.split(',');
       let letter = splitarr[0][0];
       //if (i % 2) {
-      values[letter].push({ name: splitarr[0], description: splitarr[0] });
+      values[letter].push({
+        name: splitarr[0],
+        description: splitarr[0],
+        num: i,
+      });
       //} else {
       //	values[letter].push({ name : splitarr[0], description : splitarr[0], detail : "" + splitarr[1] });
       //}
@@ -261,7 +265,7 @@ class HomeScreen extends Component {
     }
     // Sort within each letter of the alphabet.
     let sorter = function (a, b) {
-      return a.name > b.name;
+      return a.i < b.i;
     };
     Object.values(values).forEach(function (el) {
       el.sort(sorter);
@@ -279,6 +283,8 @@ class HomeScreen extends Component {
         mapNameIndexToLetterIndex[countNames] = countLetters;
         countNames++;
         v.id = id;
+        v.i = countNames;
+        v.name += ' (' + countNames + ')';
       });
       mapNameIndexToLetterIndex[countNames] = countLetters;
       countNames++;
