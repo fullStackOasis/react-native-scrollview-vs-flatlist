@@ -325,7 +325,6 @@ export default class NamesList extends React.Component {
             inverted={this.props.inverted}
             data={pagedData}
             keyExtractor={(item) => item.id}
-            page={this.props.page}
             renderItem={this.renderItem}
             onScroll={() => {
               //
