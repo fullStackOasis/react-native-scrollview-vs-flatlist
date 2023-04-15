@@ -299,13 +299,13 @@ export default class NamesList extends React.Component {
       const processedData = getFlatListData(data);
       const initNum = 30;
       const n =
-        !this.props.page || this.props.page < 2
-          ? initNum
-          : this.props.page * 2 * 30;
+        !this.props.page || this.props.page < 1
+          ? 2 * initNum
+          : this.props.page * 3 * initNum;
       console.log(
         'NamesList.render flatList with loader, page is ' +
-          this.state.page +
-          ' processedData lebgth is ' +
+          this.props.page +
+          ' processedData length is ' +
           processedData.length +
           ' n is ' +
           n
