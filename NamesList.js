@@ -86,48 +86,6 @@ export default class NamesList extends React.Component {
     }
   }
 
-  filterList(search, props) {
-    console.log('NamesList.filterList');
-    const { data, sortFields, headerData } = props ? props : this.props;
-    let items = {};
-
-    if (data) {
-      items = data
-        .sort((a, b) => {
-          return a[sortFields[0]] < b[sortFields[0]]
-            ? -1
-            : a[sortFields[0]] > b[sortFields[0]]
-            ? 1
-            : 0;
-        })
-        .reduce((r, e) => {
-          // Check if number
-          if (e[sortFields[0]]) {
-            let key =
-              e[sortFields[0]] && isNaN(e[sortFields[0]][0])
-                ? e[sortFields[0]][0]
-                : '#';
-            if (!r[key]) r[key] = [e];
-            else r[key].push(e);
-          }
-          console.log('XXXXX');
-          return r;
-        }, {});
-    }
-    console.log('NamesList called setState 1');
-    this.setState({ items, header: headerData, hosts: hosts }, () => {
-      this.resetScroll();
-    });
-  }
-
-  // Reset the list when nothing is entered or clearing
-  resetList(event) {
-    console.log('NamesList.resetList');
-    if (event.nativeEvent.selection.end === 0) {
-      this.filterList();
-    }
-  }
-
   resetScroll() {
     if (this.listView && this.listView.list && this.state.items.length > 0) {
       this.listView.list.scrollToIndex({
@@ -317,7 +275,7 @@ export default class NamesList extends React.Component {
         <React.Fragment>
           <FlatList
             initialNumToRender={initNum - 1}
-            onEndReachedThreshold={0.99}
+            onEndReachedThreshold={2.5}
             onEndReached={() => {
               console.log('onEndReached');
               this.props.onScrollHandler();

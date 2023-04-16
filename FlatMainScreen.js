@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import NamesList from './NamesList';
+// You can mess around and swap NamesList or NamesListFunc
+// Effectively the same.
+import NamesListFunc from './NamesListFunc';
 //import {NavigationEvents} from 'react-navigation';
 import FooterComponent from './FooterComponent';
 import TextWrapper from './TextWrapper';

@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+/**
+ * Swap back and forth between NamesList and NamesListFunc
+ * to compare difference between behavior when there's a function
+ * component vs class component.
+ */
 import NamesList from './NamesList';
+import NamesListFunc from './NamesListFunc';
 import FooterComponent from './FooterComponent';
 import TextWrapper from './TextWrapper';
 const windowWidth = Dimensions.get('window').width;
@@ -127,14 +133,14 @@ class MainScreen extends Component {
 			/> */}
         {progressBar}
         <ContentView
-          size="small"
+          size='small'
           tabs={true}
           isPadding={true}
           onLayout={(event) => {
             this.height = event.nativeEvent.layout.height;
           }}>
-          <NamesList
-            key="namesList"
+          <NamesListFunc
+            key='namesList'
             /*ref={ref => (this.contactList = ref)}*/
             data={data}
             showAlpha={Boolean(showAlpha)}
@@ -148,7 +154,7 @@ class MainScreen extends Component {
               this.props.route.params.loader ? this.onScrollHandler : () => {}
             }
             onSwipeablePress={this._handleSwipeableButton}
-            containerHeight={this.height || windowHeight}></NamesList>
+            containerHeight={this.height || windowHeight}></NamesListFunc>
         </ContentView>
         <FooterComponent />
       </MainScreenWrapper>
